@@ -14,14 +14,6 @@ html {
   background-color: floralwhite;
 }
 
-.filter-btn {
-  padding: 5px;
-  border: solid 2px #ff1867;
-  border-radius: 3px;
-  font-weight: bold;
-  color: #ff1867;
-}
-
 .create-sticker {
   display: grid;
   grid-template-columns: 1fr 1fr;

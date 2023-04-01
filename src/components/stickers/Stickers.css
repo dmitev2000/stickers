@@ -1,70 +1,95 @@
 .sticker-list {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 50px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 50px;
 }
 
 .sticker {
-    position: relative;
-    border-radius: 5px;
+  position: relative;
+  border-radius: 5px;
 }
 
 .sticker:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .sticker h3 {
-    border-bottom: solid 2px #ff1867;
-    border-radius: 5px;
-    padding: 5px;
-    margin-bottom: 20px;
-    text-align: center;
+  border-bottom: solid 2px #ff1867;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .sticker img {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    width: 300px;
-    height: 300px;
-    border: solid 0.5px gray;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  width: 300px;
+  height: 300px;
+  border: solid 0.5px gray;
 }
 
 .sticker .info {
-    max-width: 300px;
-    color: #fff;
-    background-color: #27282c;
-    padding: 15px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+  max-width: 300px;
+  color: #fff;
+  background-color: #27282c;
+  padding: 15px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .sticker .info i {
-    margin-right: 7px;
-    font-size: 25px;
+  margin-right: 7px;
+  font-size: 25px;
 }
 
 .sticker .info span {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .by {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    border-radius: 50%;
-    background-color: #27282c;
-    width: 30px;
-    height: 30px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border-radius: 50%;
+  background-color: #27282c;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .price {
-    font-size: 25px;
+  font-size: 25px;
+}
+
+.filter-btn {
+  padding: 5px;
+  border: solid 2px #ff1867;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #ff1867;
+  min-width: 100px;
+}
+
+.selected {
+  background-color: #ff1867;
+  color: white;  
+}
+
+.zero-stickers-wrapper {
+  min-height: calc(100vh - 424px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zero-stickers {
+  color: #ff1867;
 }

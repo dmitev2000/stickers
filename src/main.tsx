@@ -1,14 +1,17 @@
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import App from './App'
-import './index.css'
-import Navbar from './components/navbar/Navbar';
-import Footer from './components/footer/Footer';
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import "./index.css";
+import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/footer/Footer";
+import { FilterContextProvider } from "./context/FilterContext";
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <Navbar />
-    <App />
+    <FilterContextProvider>
+      <App />
+    </FilterContextProvider>
     <Footer />
-  </BrowserRouter>,
-)
+  </BrowserRouter>
+);
