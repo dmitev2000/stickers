@@ -1,0 +1,27 @@
+.browse-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 45px;
+  font-size: 20px;
+}
+
+.bo-link {
+  text-decoration: none;
+  color: #27282c;
+}
+
+.bo-link-active {
+  text-decoration: none;
+  color: #ff1867;
+  border-bottom: solid 4px #ff1867;
+}
+
+.bo-link:hover,
+.bo-link-active:hover {
+  text-decoration: none;
+  color: #ff1867;
+  font-weight: bold;
+  border-bottom: solid 4px #ff1867;
+}
