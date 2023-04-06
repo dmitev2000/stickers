@@ -141,3 +141,16 @@ html {
   flex-direction: column;
   gap: 25px;
 }
+
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  min-height: calc(100vh - 160px);
+}
+
+.not-found h3 {
+  color: #ff1867;
+}

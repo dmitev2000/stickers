@@ -14,21 +14,25 @@ const StickerList = ({ stickers }: { stickers: any }) => {
       setFilteredStickers(() => stickers);
     } else {
       setFilteredStickers(() =>
-        stickers.filter((sticker: any, index: any) => {
+        stickers.filter((sticker: any, index: number) => {
           return sticker.sticker_type === FilterCtx.filterCriteria;
         })
       );
     }
-  }, [FilterCtx.filterCriteria]);
+  }, [FilterCtx.filterCriteria, FilterCtx.currValue]);
 
   return (
     <div className="sticker-list">
       {filteredStickers.length === 0 ? (
         <div className="zero-stickers-wrapper">
-          <h3 className="zero-stickers">No stickers found for this category.</h3>
+          <h3 className="zero-stickers">
+            No stickers found for this category.
+          </h3>
         </div>
       ) : (
-        filteredStickers.map(
+        filteredStickers.filter((sticker: any) => {
+          return sticker.price <= FilterCtx.currValue;
+        }).map(
           (element: { _id: Key | null | undefined }, index: any) => {
             return <Sticker sticker={element} key={element._id} />;
           }

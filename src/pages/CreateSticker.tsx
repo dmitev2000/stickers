@@ -8,16 +8,19 @@ import axios from "axios";
 const CreateSticker = () => {
   const BASE_URL = "http://localhost:5000/api/stickers/";
   const [title, setTitle] = useState("Title");
-  const [image, setImage] = useState(
-    "https://p7.hiclipart.com/preview/92/27/596/question-mark-business-information-clip-art-pictures-of-question-marks.jpg"
-  );
+  const [image, setImage] = useState("");
+  const [validImageUrl, setValidImageUrl] = useState(false);
   const [price, setPrice] = useState(0);
   const [type, setType] = useState("Type");
   const [company, setCompany] = useState("Company");
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   const SubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!validImageUrl) {
+      console.log("Invalid image url");
+      return;
+    }
     const newSticker = {
       title: title,
       image: image,
@@ -49,6 +52,20 @@ const CreateSticker = () => {
       .catch((err) => console.error(err));
   };
 
+  const StickerImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const url = event.target.value;
+    setImage(() => url);
+
+    const imageObject = new Image();
+    imageObject.onload = () => {
+      setValidImageUrl(() => true);
+    };
+    imageObject.onerror = () => {
+      setValidImageUrl(() => false);
+    };
+    imageObject.src = url;
+  };
+
   return (
     <div className="container py-5">
       <BrowseOptions />
@@ -69,11 +86,14 @@ const CreateSticker = () => {
             id="image"
             placeholder="Sticker image"
             autoComplete="off"
-            onChange={(e) => {
-              setImage(() => e.target.value);
-            }}
+            onChange={StickerImageChange}
             required
           />
+          {!image ? <span className="invalid-url">Sticker image required</span> : validImageUrl ? (
+            <span className="valid-url">Valid url</span>
+          ) : (
+            <span className="invalid-url">Invalid url</span>
+          )}
           <input
             type="text"
             id="company"
@@ -101,7 +121,7 @@ const CreateSticker = () => {
           <input
             type="number"
             min={0.1}
-            step={0.1}
+            step={0.05}
             id="price"
             placeholder="Price"
             autoComplete="off"
@@ -119,7 +139,7 @@ const CreateSticker = () => {
               <h3>{title}</h3>
               <div
                 style={{ maxWidth: "250px" }}
-                className="d-flex justify-content-evenly flex-wrap"
+                className="d-flex justify-content-center align-items-center flex-column gap-2 flex-wrap"
               >
                 <span>
                   <i className="bi bi-camera"></i>

@@ -93,3 +93,17 @@
 .zero-stickers {
   color: #ff1867;
 }
+
+.valid-url {
+  color: green;
+  border-top: solid 5px green;
+  width: 100%;
+  font-weight: bold;
+}
+
+.invalid-url {
+  font-weight: bold;
+  color: #ff1867;
+  border-top: solid 5px #ff1867;
+  width: 100%;
+}

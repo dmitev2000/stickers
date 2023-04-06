@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/footer/Footer";
+// import Footer from "./components/footer/Footer";
 import { FilterContextProvider } from "./context/FilterContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -12,6 +12,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <FilterContextProvider>
       <App />
     </FilterContextProvider>
-    <Footer />
+    {/* <Footer /> */}
   </BrowserRouter>
 );

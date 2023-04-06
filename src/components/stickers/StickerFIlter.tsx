@@ -43,6 +43,9 @@ const StickerFIlter = () => {
       <button onClick={FilterStickers} className="filter-btn">
         Protocol
       </button>
+      <button onClick={FilterStickers} className="filter-btn">
+        Other
+      </button>
     </div>
   );
 };

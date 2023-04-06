@@ -2,7 +2,7 @@ import Sticker from "../models/StickerModel.js";
 
 export const GetStickers = async (req, res, next) => {
   try {
-    const stickers = await Sticker.find({});
+    const stickers = await Sticker.find({}).sort({ createdAt: -1 });
     res.status(200).json(stickers);
   } catch (error) {
     res.status(500).json(error.message);
