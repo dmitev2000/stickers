@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import BrowseOptions from "../components/browse-options/BrowseOptions";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.css";
+import {
+  FireErrorNotification,
+  FireNotification,
+} from "../utils/FireNotificiation";
 import axios from "axios";
+import { AuthenticationContext } from "../context/AuthenticationContext";
 
 const CreateSticker = () => {
   const BASE_URL = "http://localhost:5000/api/stickers/";
@@ -13,6 +16,7 @@ const CreateSticker = () => {
   const [price, setPrice] = useState(0);
   const [type, setType] = useState("Type");
   const [company, setCompany] = useState("Company");
+  const AuthCtx = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   const SubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -29,27 +33,22 @@ const CreateSticker = () => {
       company: company,
     };
     axios
-      .post(`${BASE_URL}/add`, newSticker)
+      .post(`${BASE_URL}/add`, newSticker, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${AuthCtx.token}`,
+        },
+      })
       .then((res) => {
         //console.log(res.data);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast: any) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Your sticker has been created.",
-        });
+        FireNotification("Your sticker has been created.");
         navigate("/");
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        FireErrorNotification(
+          `${err.response.data}. To create stickers you must be logged in.`
+        );
+      });
   };
 
   const StickerImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +88,9 @@ const CreateSticker = () => {
             onChange={StickerImageChange}
             required
           />
-          {!image ? <span className="invalid-url">Sticker image required</span> : validImageUrl ? (
+          {!image ? (
+            <span className="invalid-url">Sticker image required</span>
+          ) : validImageUrl ? (
             <span className="valid-url">Valid url</span>
           ) : (
             <span className="invalid-url">Invalid url</span>

@@ -5,13 +5,19 @@ import "./index.css";
 import Navbar from "./components/navbar/Navbar";
 // import Footer from "./components/footer/Footer";
 import { FilterContextProvider } from "./context/FilterContext";
+import { AuthenticationContextProvider } from "./context/AuthenticationContext";
+import { CartContextProvider } from "./context/CartContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
-    <Navbar />
-    <FilterContextProvider>
-      <App />
-    </FilterContextProvider>
-    {/* <Footer /> */}
+    <AuthenticationContextProvider>
+      <CartContextProvider>
+        <Navbar />
+        <FilterContextProvider>
+          <App />
+        </FilterContextProvider>
+        {/* <Footer /> */}
+      </CartContextProvider>
+    </AuthenticationContextProvider>
   </BrowserRouter>
 );

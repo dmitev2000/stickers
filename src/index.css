@@ -34,9 +34,9 @@ html {
 }
 
 .create-sticker-form input[type="submit"] {
-    background-color: #27282c;
-    color: #ff1867;
-    border: solid 2px;
+  background-color: #27282c;
+  color: #ff1867;
+  border: solid 2px;
 }
 
 .create-sticker-form::before {
@@ -68,20 +68,20 @@ html {
 }
 
 .sticker-preview .demo-sticker-info {
-    background-color: #27282c;
-    color: white;
-    padding: 5px;
+  background-color: #27282c;
+  color: white;
+  padding: 5px;
 }
 
 .sticker-preview .demo-sticker-info .demo-sticker-price {
-    display: block;
-    text-align: center;
-    font-size: 25px;
-    padding: 10px;
+  display: block;
+  text-align: center;
+  font-size: 25px;
+  padding: 10px;
 }
 
 .sticker-preview .demo-sticker-info span i {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .sticker-preview .demo-sticker-info h3 {
@@ -127,14 +127,14 @@ html {
   gap: 25px;
 }
 
-.favs-coming-soon h3, .cart-coming-soon h3 {
+.favs-coming-soon h3,
+.cart-wrapper h3, .empty-cart h3 {
   color: #ff1867;
   font-size: 35px;
 }
 
-.cart-coming-soon {
-  margin-top: 25px;
-  min-height: calc(100vh - 185px);
+.empty-cart {
+  min-height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,4 +153,119 @@ html {
 
 .not-found h3 {
   color: #ff1867;
+}
+
+.auth-wrapper {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-image: url("./assets/auth-bg-outline.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.auth-wrapper form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 400px;
+  gap: 15px;
+}
+
+.auth-wrapper form input {
+  padding: 10px;
+  width: 100%;
+}
+
+.auth-wrapper form input:focus {
+  outline: solid 1px #ff1867;
+}
+
+.auth-wrapper .form-wrapper {
+  padding: 25px;
+  box-shadow: 0 0 25px #ff1867;
+}
+
+.auth-wrapper .form-wrapper input[type="submit"] {
+  outline: solid 1px #ff1867;
+  border: none;
+  background-color: transparent;
+  transition: 0.4s ease-in-out;
+}
+
+.auth-wrapper .form-wrapper input[type="submit"]:hover {
+  background-color: #ff1867;
+  color: white;
+  cursor: pointer;
+}
+
+td > div > img {
+  height: 100px;
+  width: 100px;
+}
+
+td {
+  min-height: 100px;
+}
+
+.td-div {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.td-div p {
+  margin: 0;
+}
+
+.remove-item-btn {
+  columns: white;
+  background-color: #ff1867;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  width: 45px;
+  height: 45px;
+  opacity: .8;
+}
+
+.remove-item-btn:hover {
+  opacity: 1;
+}
+
+.remove-item-btn i {
+  font-size: 25px;
+  color: white;
+}
+
+.quantity-changer {
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: white;
+}
+
+.black {
+  background-color: #27282c;
+}
+
+.red {
+  background-color: #ff1867;
+}
+
+tfoot {
+  border-top: solid 2px #27282c;
+  font-size: 25px;
 }

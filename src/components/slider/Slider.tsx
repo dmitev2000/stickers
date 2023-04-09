@@ -7,7 +7,7 @@ const Slider = () => {
 
   return (
     <div className="slider-container">
-      <div className="d-flex justify-content-center align-items-center gap-2">
+      <div className="d-flex justify-content-center align-items-center gap-2 w-100 px-3">
         <span>${FilterCtx.minValue.toFixed(2)}</span>
         <input
           type="range"

@@ -7,16 +7,7 @@ const StickerFIlter = () => {
   const FilterStickers = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    var btns = document.getElementsByClassName("filter-btn") as HTMLCollection;
-    for (var i = 0; i < btns.length; i++) {
-      if (btns[i].classList.contains("selected")) {
-        btns[i].classList.remove("selected");
-        break;
-      }
-    }
-    event.currentTarget.classList.add("selected");
     FilterCtx.changeFilter(event.currentTarget.innerText);
-    //console.log(event.currentTarget.innerText);
   };
 
   return (
@@ -25,25 +16,75 @@ const StickerFIlter = () => {
         style={{ fontSize: "25px", color: "#ff1867" }}
         className="bi bi-bookmark"
       ></i>
-      <button onClick={FilterStickers} className="filter-btn selected">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "All" ||
+          FilterCtx.filterCriteria === "None"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         All
       </button>
-      <button onClick={FilterStickers} className="filter-btn">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "Language"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         Language
       </button>
-      <button onClick={FilterStickers} className="filter-btn">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "Tooling"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         Tooling
       </button>
-      <button onClick={FilterStickers} className="filter-btn">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "Service"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         Service
       </button>
-      <button onClick={FilterStickers} className="filter-btn">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "Framework"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         Framework
       </button>
-      <button onClick={FilterStickers} className="filter-btn">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "Protocol"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         Protocol
       </button>
-      <button onClick={FilterStickers} className="filter-btn">
+      <button
+        onClick={FilterStickers}
+        className={
+          FilterCtx.filterCriteria === "Other"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
         Other
       </button>
     </div>

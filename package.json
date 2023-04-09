@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@anatoliygatt/numeric-stepper": "^1.0.9",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.11.16",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "react": "^18.2.0",

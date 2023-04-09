@@ -35,6 +35,6 @@ input[type="range"]::-ms-thumb {
 
 @media screen and (max-width: 510px) {
   .slider-container {
-    width: 90%;
+    width: 80%;
   }
 }

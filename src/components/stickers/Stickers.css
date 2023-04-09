@@ -107,3 +107,11 @@
   border-top: solid 5px #ff1867;
   width: 100%;
 }
+
+.add-to-cart, .add-to-fav {
+  min-width: 100px;
+  padding: 5px 10px;
+  color: #ff1867;
+  border-radius: 5px;
+  background-color: #fff;
+}
