@@ -2,11 +2,12 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthenticationContext } from "../../context/AuthenticationContext";
 import AccountMenu from "../account-menu/AccountMenu";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/red-bull.png";
 import CartIndicator from "../cart/CartIndicator";
 import LoginIcon from "@mui/icons-material/Login";
 import Tooltip from "@mui/material/Tooltip";
 import "./Navbar.css";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const Navbar = () => {
   const AuthCtx = useContext(AuthenticationContext);
@@ -14,8 +15,9 @@ const Navbar = () => {
   return (
     <nav>
       <Link to="/" className="logo">
-        <img src={logo} alt="logo" />
-        Rainbow Stickers
+        {/* <img src={logo} alt="logo" /> */}
+        <span>The</span>
+        Stickers
       </Link>
       <div className="d-flex gap-3">
         {!AuthCtx.user ? (
@@ -26,6 +28,18 @@ const Navbar = () => {
           </Link>
         ) : (
           <>
+            {AuthCtx.user.role === "Admin" && (
+              <div
+                className="d-flex align-items-center mx-4"
+                style={{ cursor: "pointer", color: "#ff1867" }}
+              >
+                <Link to="/admin/dashboard" className="admin-dashboard-link">
+                  <Tooltip title="Dashboard">
+                    <DashboardIcon />
+                  </Tooltip>
+                </Link>
+              </div>
+            )}
             <CartIndicator />
             <AccountMenu />
           </>

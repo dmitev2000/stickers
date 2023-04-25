@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@anatoliygatt/numeric-stepper": "^1.0.9",
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.10.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.16",

@@ -13,7 +13,7 @@ const Slider = () => {
           type="range"
           min={FilterCtx.minValue}
           max={FilterCtx.maxValue}
-          step={0.05}
+          step={0.01}
           value={FilterCtx.currValue}
           className="slider"
           onChange={(event) => {

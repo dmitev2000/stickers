@@ -71,6 +71,70 @@ export const RemoveItemFromCart = async (req, res, next) => {
   }
 };
 
+export const IncrementQuantity = async (req, res, next) => {
+  try {
+    const userID = req.body.userID;
+    const stickerID = req.body.stickerID;
+
+    const cart = await UserCart.findOne({ userID: userID });
+
+    if (!cart) {
+      return next(CreateError(400, "Bad request."));
+    }
+
+    const list = cart.stickerList.map((item) => {
+      if (item.sticker._id === stickerID) {
+        return { sticker: item.sticker, quantity: item.quantity + 1 };
+      } else {
+        return item;
+      }
+    });
+
+    await UserCart.updateOne(
+      { userID: req.body.userID },
+      { $set: { stickerList: list } }
+    );
+
+    return res.status(200).json(list);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const DecrementQuantity = async (req, res, next) => {
+  try {
+    const userID = req.body.userID;
+    const stickerID = req.body.stickerID;
+
+    const cart = await UserCart.findOne({ userID: userID });
+
+    if (!cart) {
+      return next(CreateError(400, "Bad request."));
+    }
+
+    const list = cart.stickerList.map((item) => {
+      if (item.sticker._id === stickerID) {
+        if (item.quantity === 1) {
+          return item;
+        } else {
+          return { sticker: item.sticker, quantity: item.quantity - 1 };
+        }
+      } else {
+        return item;
+      }
+    });
+
+    await UserCart.updateOne(
+      { userID: req.body.userID },
+      { $set: { stickerList: list } }
+    );
+
+    return res.status(200).json(list);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const EmptyCart = async (req, res, next) => {
   try {
     const cart = await UserCart.findOne({ userID: req.body.userID });

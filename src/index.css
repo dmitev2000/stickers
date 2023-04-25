@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap");
 @import url("../node_modules/bootstrap/dist/css/bootstrap.css");
 @import url("../node_modules/bootstrap-icons/font/bootstrap-icons.css");
 
@@ -11,7 +12,7 @@
 
 body,
 html {
-  background-color: floralwhite;
+  background-color: #fff;
 }
 
 .create-sticker {
@@ -33,10 +34,17 @@ html {
   z-index: 1;
 }
 
-.create-sticker-form input[type="submit"] {
-  background-color: #27282c;
-  color: #ff1867;
-  border: solid 2px;
+.create-sticker-form input[type="submit"],
+.checkout-form input[type="submit"] {
+  color: white;
+  background-color: #ff1867;
+  border: solid 2px #ff1867;
+  transition: 0.3s ease-in-out;
+}
+
+.create-sticker-form input[type="submit"]:hover,
+.checkout-form input[type="submit"]:hover {
+  opacity: 0.9;
 }
 
 .create-sticker-form::before {
@@ -47,12 +55,13 @@ html {
   top: -13px;
   left: 25px;
   z-index: 2;
-  background-color: floralwhite;
+  background-color: #fff;
   padding: 0 10px;
 }
 
 .create-sticker-form input,
-.create-sticker-form select {
+.create-sticker-form select,
+.checkout-form input[type="submit"] {
   width: 100%;
   font-size: 25px;
   padding: 5px;
@@ -106,7 +115,7 @@ html {
   top: -13px;
   left: 25px;
   z-index: 2;
-  background-color: floralwhite;
+  background-color: #fff;
   padding: 0 10px;
 }
 
@@ -128,18 +137,56 @@ html {
 }
 
 .favs-coming-soon h3,
-.cart-wrapper h3, .empty-cart h3 {
+.cart-wrapper h3 {
   color: #ff1867;
   font-size: 35px;
 }
 
 .empty-cart {
-  min-height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 25px;
+  min-height: calc(100vh - 80px);
+}
+
+.empty-cart h3 {
+  color: #27282c;
+  font-weight: bolder;
+  font-size: 25px;
+}
+
+.empty-cart h3 span {
+  color: #ff1867;
+}
+
+.empty-cart img {
+  aspect-ratio: 1/1;
+  max-width: 300px;
+  transform: translateX(-30px);
+}
+
+.empty-cart p {
+  font-size: 17px;
+  text-align: center;
+}
+
+.empty-cart .browse-link {
+  text-decoration: none;
+  margin: 10px;
+  padding: 10px;
+  background-color: #ff1867;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 5px;
+  border: solid 2px #ff1867;
+  font-weight: bold;
+}
+
+.empty-cart .browse-link:hover {
+  color: #ff1867;
+  background-color: #fff;
+  transition: 0.4s ease-in-out;
 }
 
 .not-found {
@@ -232,7 +279,7 @@ td {
   outline: none;
   width: 45px;
   height: 45px;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .remove-item-btn:hover {
@@ -257,6 +304,10 @@ td {
   color: white;
 }
 
+.quantity-changer:disabled {
+  opacity: 0.3;
+}
+
 .black {
   background-color: #27282c;
 }
@@ -268,4 +319,95 @@ td {
 tfoot {
   border-top: solid 2px #27282c;
   font-size: 25px;
+}
+
+.total-price,
+.total-price span {
+  font-family: "Holtwood One SC", serif;
+}
+
+.total-price span {
+  color: #ff1867;
+}
+
+.checkout {
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  flex-wrap: wrap;
+  min-height: 80px;
+}
+
+.cart-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  padding: 15px;
+  border: solid 2px #ff1867;
+  background-color: #ff1867;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.cart-buttons:hover {
+  opacity: 0.9;
+  color: white;
+}
+
+.account-menu-link,
+.account-menu-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.checkout {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.checkout > div {
+  flex: 1;
+  border: solid 2px #ff1867;
+  position: relative;
+  padding: 15px;
+}
+
+.checkout img {
+  width: 80px;
+  height: 80px;
+}
+
+.checkout > div:first-child::before {
+  position: absolute;
+  content: "Shipping & payment details";
+  text-transform: uppercase;
+  font-size: 18px;
+  top: -13px;
+  left: 25px;
+  z-index: 2;
+  background-color: #fff;
+  padding: 0 10px;
+}
+
+.checkout > div:nth-child(2)::before {
+  position: absolute;
+  content: "Your order";
+  text-transform: uppercase;
+  font-size: 18px;
+  top: -13px;
+  left: 25px;
+  z-index: 2;
+  background-color: #fff;
+  padding: 0 10px;
+}
+
+@media screen and (max-width: 780px) {
+  .create-sticker {
+    grid-template-columns: 1fr;
+  }
 }

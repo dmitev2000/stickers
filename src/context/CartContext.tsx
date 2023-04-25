@@ -1,6 +1,15 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { CartItem, CartContextType } from "../interfaces/Interfaces";
-import { FireErrorNotification } from "../utils/FireNotificiation";
+
+const getStoredCartItems = () => {
+  try {
+    const cartItems = localStorage.getItem("cartItems");
+    const stickerList = cartItems ? JSON.parse(cartItems) : [];
+    return stickerList;
+  } catch (error) {
+    return [];
+  }
+};
 
 const CartContext = createContext<CartContextType>({
   stickerList: [],
@@ -14,24 +23,36 @@ const CartContext = createContext<CartContextType>({
 });
 
 export const CartContextProvider = (props: any) => {
-  const [stickerList, setStickerList] = useState([]);
-  const [totalStickers, setTotalStickers] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [stickerList, setStickerList] = useState(getStoredCartItems());
+  const [totalStickers, setTotalStickers] = useState(
+    getStoredCartItems().reduce(
+      (accumulator: number, currentValue: any) =>
+        accumulator + currentValue.quantity,
+      0
+    )
+  );
+  const [totalPrice, setTotalPrice] = useState(
+    getStoredCartItems().reduce(
+      (accumulator: number, currentValue: any) =>
+        accumulator + currentValue.quantity * currentValue.sticker.price,
+      0
+    )
+  );
 
   const addSticker = (item: any) => {
     const index = stickerList.findIndex((s: any) => {
       return s.sticker._id === item.sticker._id;
     });
     if (index === -1) {
-      setStickerList((prev) => prev.concat(item));
-      setTotalStickers((prev) => prev + item.quantity);
-      setTotalPrice((prev) => prev + item.quantity * item.sticker.price);
+      setStickerList((prev: any) => prev.concat(item));
+      setTotalStickers((prev: any) => prev + item.quantity);
+      setTotalPrice((prev: any) => prev + item.quantity * item.sticker.price);
     } else {
       const updatedList: any = stickerList;
       updatedList[index].quantity = updatedList[index].quantity + item.quantity;
       setStickerList(() => updatedList);
-      setTotalStickers((prev) => prev + item.quantity);
-      setTotalPrice((prev) => prev + item.quantity * item.sticker.price);
+      setTotalStickers((prev: any) => prev + item.quantity);
+      setTotalPrice((prev: any) => prev + item.quantity * item.sticker.price);
     }
   };
 
@@ -42,8 +63,8 @@ export const CartContextProvider = (props: any) => {
     const updatedList: any = stickerList;
     updatedList[index].quantity = updatedList[index].quantity + 1;
     setStickerList(() => updatedList);
-    setTotalStickers((prev) => prev + 1);
-    setTotalPrice((prev) => prev + item.sticker.price);
+    setTotalStickers((prev: any) => prev + 1);
+    setTotalPrice((prev: any) => prev + item.sticker.price);
   };
 
   const decreaseQuantity = (item: any) => {
@@ -51,21 +72,17 @@ export const CartContextProvider = (props: any) => {
       return s.sticker._id === item.sticker._id;
     });
     const updatedList: any = stickerList;
-    updatedList[index].quantity = updatedList[index].quantity - 1;
-    if (updatedList[index].quantity === 0) {
-      updatedList.splice(index, 1);
-      FireErrorNotification(
-        `${item.sticker.title} sticker is removed from the cart.`
-      );
+    if (updatedList[index].quantity > 1) {
+      updatedList[index].quantity = updatedList[index].quantity - 1;
+      setStickerList(() => updatedList);
+      setTotalStickers((prev: any) => prev - 1);
+      setTotalPrice((prev: any) => prev - item.sticker.price);
     }
-    setStickerList(() => updatedList);
-    setTotalStickers((prev) => prev - 1);
-    setTotalPrice((prev) => prev - item.sticker.price);
   };
 
   const removeSticker = (item: any) => {
     console.log(item.sticker);
-    setStickerList((prev) =>
+    setStickerList((prev: any) =>
       prev.filter((s: any) => {
         return s.sticker._id !== item.sticker._id;
       })
@@ -83,6 +100,10 @@ export const CartContextProvider = (props: any) => {
     setTotalStickers(() => 0);
     setTotalPrice(() => 0);
   };
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(stickerList));
+  }, [totalStickers]);
 
   const context = {
     stickerList: stickerList,

@@ -26,14 +26,17 @@ const Login = () => {
         axios
           .get(`${BASE_URL}/cart/${res.data.user._id}`)
           .then((res) => {
-            console.log(res.data);
-            for(var i = 0; i < res.data.length; i++) {
-              CartCtx.addSticker({ sticker: res.data[i].sticker, quantity: res.data[i].quantity });
+            //console.log(res.data);
+            for (var i = 0; i < res.data.length; i++) {
+              CartCtx.addSticker({
+                sticker: res.data[i].sticker,
+                quantity: res.data[i].quantity,
+              });
             }
+            FireNotification("Great! Successfully logged in. Enjoy!");
+            navigate("/");
           })
           .catch((err) => console.error(err));
-        FireNotification("Great! Successfylly logged in. Enjoy!");
-        navigate("/");
       })
       .catch((err) => {
         AuthCtx.dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });

@@ -3,6 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -10,11 +11,13 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { AuthenticationContext } from "../../context/AuthenticationContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FireNotification } from "../../utils/FireNotificiation";
+import CartContext from "../../context/CartContext";
 
 const AccountMenu = () => {
   const AuthCtx = React.useContext(AuthenticationContext);
+  const CartCtx = React.useContext(CartContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -30,32 +33,34 @@ const AccountMenu = () => {
     AuthCtx.dispatch({ type: "LOGOUT" });
     handleClose();
     FireNotification("You are now logged out");
+    localStorage.setItem("cartItems", JSON.stringify([]));
+    CartCtx.emptyCart();
     navigate("/");
-  }
+  };
 
   return (
     <React.Fragment>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+      <Tooltip title="Account settings">
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? "account-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+        >
+          <Avatar
+            sx={{
+              width: 32,
+              height: 32,
+              bgcolor: "#ff1867",
+              color: "#27282c",
+            }}
           >
-            <Avatar
-              sx={{
-                width: 32,
-                height: 32,
-                bgcolor: "#ff1867",
-                color: "#27282c",
-              }}
-            >
-              {AuthCtx.user.username[0].toUpperCase()}
-            </Avatar>
-          </IconButton>
-        </Tooltip>
+            {AuthCtx.user.username[0].toUpperCase()}
+          </Avatar>
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -99,19 +104,27 @@ const AccountMenu = () => {
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
-          Add another account
+          <span>Add another account</span>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <ListAltIcon fontSize="small" />
+          </ListItemIcon>
+          <Link to="/my-orders" className="account-menu-link">
+            My orders
+          </Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          <span>Settings</span>
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          <span>Logout</span>
         </MenuItem>
       </Menu>
     </React.Fragment>

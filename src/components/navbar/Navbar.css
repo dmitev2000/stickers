@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Sedgwick+Ave+Display&display=swap');
+
 nav {
     min-height: 80px;
     background-color: #27282c;
@@ -11,8 +13,9 @@ nav {
 
 nav img {
     max-width: 50px;
-    max-height: 30px;
+    max-height: 50px;
     margin-right: 10px;
+    transform: scaleX(-1);
 }
 
 .cart-btn {
@@ -37,9 +40,41 @@ nav img {
     color: #ff1867;
     text-decoration: none;
     font-size: 20px;
+    font-family: 'Sedgwick Ave Display', cursive;
+    border: solid 2px #ff1867;
+    border-radius: 5px;
+    padding-right: 5px;
+    transition: .8s ease-in-out;
+}
+
+.logo span {
+    background-color: #ff1867;
+    color: #27282c;
+    font-family: 'Sedgwick Ave Display', cursive;
+    padding: 2px 5px;
+    margin-right: 3px;
+    transition: .8s ease-in-out;
 }
 
 .logo:hover {
     text-decoration: none;
+    background-color: #ff1867;
+    color: #27282c;
+}
+
+.logo:hover span {
     color: #ff1867;
+    background-color: #27282c;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+}
+
+.admin-dashboard-link {
+    color: #ff1867;
+    text-decoration: none;
+}
+
+.admin-dashboard-link:hover {
+    color: inherit;
 }

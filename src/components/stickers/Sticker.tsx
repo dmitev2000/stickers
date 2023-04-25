@@ -16,6 +16,17 @@ const Sticker = ({ sticker }: { sticker: any }) => {
   const AuthCtx = useContext(AuthenticationContext);
   const BASE_URL = "http://localhost:5000/api/cart";
 
+  const TagsToString = (array: []) => {
+    let result = "";
+    array.forEach((e, i) => {
+      result += e;
+      if (i !== array.length - 1) {
+        result += ", ";
+      }
+    });
+    return result;
+  };
+
   const AddToCart = () => {
     axios
       .post(`${BASE_URL}/update-cart`, {
@@ -43,7 +54,7 @@ const Sticker = ({ sticker }: { sticker: any }) => {
         {sticker.by === "System" ? (
           <i className="bi bi-tv" title="system"></i>
         ) : (
-          <i className="bi bi-person-circle" title="community"></i>
+          <i className="bi bi-person-circle" title={sticker.by}></i>
         )}
       </span>
       <img src={sticker.image} />
@@ -56,7 +67,7 @@ const Sticker = ({ sticker }: { sticker: any }) => {
           </span>
           <span>
             <i className="bi bi-bookmark"></i>
-            {sticker.sticker_type}
+            {TagsToString(sticker.tags)}
           </span>
         </div>
         <div className="pt-4 d-flex flex-wrap flex-column gap-4 justify-content-evenly align-items-center">

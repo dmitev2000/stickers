@@ -15,7 +15,7 @@ const StickerList = ({ stickers }: { stickers: any }) => {
     } else {
       setFilteredStickers(() =>
         stickers.filter((sticker: any, index: number) => {
-          return sticker.sticker_type === FilterCtx.filterCriteria;
+          return sticker.tags.includes(FilterCtx.filterCriteria);
         })
       );
     }

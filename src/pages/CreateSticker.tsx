@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import BrowseOptions from "../components/browse-options/BrowseOptions";
 import { useNavigate } from "react-router-dom";
 import {
@@ -7,15 +7,17 @@ import {
 } from "../utils/FireNotificiation";
 import axios from "axios";
 import { AuthenticationContext } from "../context/AuthenticationContext";
+import CreateStickerInfo from "../components/stickers/CreateStickerInfo";
 
 const CreateSticker = () => {
-  const BASE_URL = "http://localhost:5000/api/stickers/";
+  const BASE_URL = "http://localhost:5000/api/stickers";
   const [title, setTitle] = useState("Title");
   const [image, setImage] = useState("");
   const [validImageUrl, setValidImageUrl] = useState(false);
   const [price, setPrice] = useState(0);
-  const [type, setType] = useState("Type");
-  const [company, setCompany] = useState("Company");
+  const [tags, setTags] = useState(["Tags"]);
+  const [company, setCompany] = useState("Company / creator");
+  const priceInputRef = useRef<HTMLInputElement>(null);
   const AuthCtx = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
@@ -28,9 +30,10 @@ const CreateSticker = () => {
     const newSticker = {
       title: title,
       image: image,
-      sticker_type: type,
+      tags: tags,
       price: price,
       company: company,
+      by: AuthCtx.user.username,
     };
     axios
       .post(`${BASE_URL}/add`, newSticker, {
@@ -40,14 +43,19 @@ const CreateSticker = () => {
         },
       })
       .then((res) => {
-        //console.log(res.data);
         FireNotification("Your sticker has been created.");
         navigate("/");
       })
       .catch((err) => {
-        FireErrorNotification(
-          `${err.response.data}. To create stickers you must be logged in.`
-        );
+        if (err.response.data.toString().includes("duplicate key")) {
+          FireErrorNotification(
+            `This sticker is already created. Create another one or change its title or image.`
+          );
+        } else {
+          FireErrorNotification(
+            `${err.response.data}. To create stickers you must be logged in.`
+          );
+        }
       });
   };
 
@@ -58,11 +66,42 @@ const CreateSticker = () => {
     const imageObject = new Image();
     imageObject.onload = () => {
       setValidImageUrl(() => true);
+      if (imageObject.src.split(".").pop() === "svg") {
+        setPrice(() => 0.9);
+        if (priceInputRef.current) {
+          priceInputRef.current.value = "0.9";
+        }
+        return;
+      }
+      axios
+        .post(`${BASE_URL}/calculate-price`, { url: url })
+        .then((res) => {
+          setPrice(() => +res.data);
+          if (priceInputRef.current) {
+            priceInputRef.current.value = res.data.toString();
+          }
+        })
+        .catch((err) => console.log(err));
     };
     imageObject.onerror = () => {
       setValidImageUrl(() => false);
+      setPrice(() => 0.0);
+      if (priceInputRef.current) {
+        priceInputRef.current.value = "";
+      }
     };
     imageObject.src = url;
+  };
+
+  const TagsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const options = event.target.options;
+    const selectedValues: string[] = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedValues.push(options[i].value);
+      }
+    }
+    setTags(selectedValues);
   };
 
   return (
@@ -93,7 +132,9 @@ const CreateSticker = () => {
           ) : validImageUrl ? (
             <span className="valid-url">Valid url</span>
           ) : (
-            <span className="invalid-url">Invalid url</span>
+            <span className="invalid-url">
+              Invalid url or unsupported format
+            </span>
           )}
           <input
             type="text"
@@ -105,18 +146,14 @@ const CreateSticker = () => {
             }}
             required
           />
-          <select
-            required
-            onChange={(e) => {
-              setType(() => e.target.value);
-            }}
-          >
-            <option>Sticker type</option>
+          <select required multiple={true} onChange={TagsChange}>
+            <option disabled>Sticker type</option>
             <option value="Language">Language</option>
             <option value="Tooling">Tooling</option>
             <option value="Protocol">Protocol</option>
             <option value="Framework">Framework</option>
             <option value="Service">Service</option>
+            <option value="Meme">Meme</option>
             <option value="Other">Other</option>
           </select>
           <input
@@ -126,36 +163,35 @@ const CreateSticker = () => {
             id="price"
             placeholder="Price"
             autoComplete="off"
-            onChange={(e) => {
-              setPrice(() => +e.target.value);
-            }}
+            readOnly={true}
+            ref={priceInputRef}
             required
           />
           <input type="submit" value="Save sticker" />
         </form>
         <div className="sticker-preview">
           <div className="demo-sticker">
-            <img src={image} alt="" />
-            <div className="demo-sticker-info">
-              <h3>{title}</h3>
+            <img src={image} id="preview-img" alt="" />
+            <div className="demo-sticker-info" style={{ maxWidth: "250px" }}>
               <div
-                style={{ maxWidth: "250px" }}
                 className="d-flex justify-content-center align-items-center flex-column gap-2 flex-wrap"
               >
+                <h3 className="m-0 w-100" style={{fontSize: "2em"}}>{title}</h3>
                 <span>
                   <i className="bi bi-camera"></i>
                   {company}
                 </span>
                 <span>
                   <i className="bi bi-bookmark"></i>
-                  {type}
+                  {tags.toString()}
                 </span>
               </div>
-              <span className="demo-sticker-price">${price}</span>
+              <span className="demo-sticker-price">${price.toFixed(2)}</span>
             </div>
           </div>
         </div>
       </div>
+      <CreateStickerInfo />
     </div>
   );
 };

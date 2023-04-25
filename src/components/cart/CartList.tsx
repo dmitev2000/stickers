@@ -7,8 +7,8 @@ const CartList = ({ CartList }: { CartList: CartItem[] }) => {
   const CartCtx = useContext(CartContext);
 
   return (
-    <table className="table table-hover">
-      <thead style={{backgroundColor: "#27282c", color: "white"}}>
+    <table className="table table-hover" style={{ minWidth: "600px" }}>
+      <thead style={{ backgroundColor: "#27282c", color: "white" }}>
         <tr className="align-middle">
           <th>Product</th>
           <th className="text-center">Quantity</th>
@@ -24,7 +24,9 @@ const CartList = ({ CartList }: { CartList: CartItem[] }) => {
       </tbody>
       <tfoot>
         <tr>
-          <td colSpan={5} className="text-end fw-bold">Total price: ${CartCtx.totalPrice.toFixed(2)}</td>
+          <td colSpan={5} className="text-end fw-bold total-price">
+            Total: <span>${CartCtx.totalPrice.toFixed(2)}</span>
+          </td>
         </tr>
       </tfoot>
     </table>

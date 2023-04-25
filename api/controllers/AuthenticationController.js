@@ -20,6 +20,7 @@ export const Register = async (req, res, next) => {
     const newUser = new User({
       username: req.body.username,
       password: hash,
+      role: req.body.role || "User",
     });
     await newUser.save();
 
@@ -53,7 +54,7 @@ export const Login = async (req, res, next) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
 
     const { password, ...otherProps } = user._doc;

@@ -6,9 +6,11 @@ export interface Sticker {
   company: string;
   by: string;
   price: number;
-  sticker_type: string;
+  tags: string[];
   createdAt: string | null;
   modifiedAt: string | null;
+  reviewed: boolean;
+  status: string;
 }
 
 export interface CartItem {
@@ -22,7 +24,7 @@ export interface CartContextType {
   totalPrice: number;
   addSticker: (item: CartItem) => void;
   removeSticker: (sticker: CartItem) => void;
-  increaseQuantity: (item: CartItem) => void,
-  decreaseQuantity: (item: CartItem) => void,
+  increaseQuantity: (item: CartItem) => void;
+  decreaseQuantity: (item: CartItem) => void;
   emptyCart: () => void;
 }

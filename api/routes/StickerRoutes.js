@@ -3,6 +3,9 @@ import {
   GetStickers,
   AddSticker,
   GetStickerById,
+  CalculatePriceForSticker,
+  GetPendingStickers,
+  UpdateStickerStatus,
 } from "../controllers/StickerController.js";
 import { VerifyToken } from "../utils/VerifyToken.js";
 
@@ -12,6 +15,13 @@ router.get("/", GetStickers);
 
 router.get("/:id", GetStickerById);
 
-router.post("/add", VerifyToken, AddSticker);
+router.get("/get/pending", GetPendingStickers);
+
+router.post("/add", AddSticker);
+
+router.post("/update-status", UpdateStickerStatus)
+
+router.post("/calculate-price", CalculatePriceForSticker);
+
 
 export default router;

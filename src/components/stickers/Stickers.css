@@ -80,7 +80,7 @@
 
 .selected {
   background-color: #ff1867;
-  color: white;  
+  color: white;
 }
 
 .zero-stickers-wrapper {
@@ -108,10 +108,28 @@
   width: 100%;
 }
 
-.add-to-cart, .add-to-fav {
+.add-to-cart,
+.add-to-fav {
   min-width: 100px;
   padding: 5px 10px;
   color: #ff1867;
   border-radius: 5px;
   background-color: #fff;
+}
+
+.approve,
+.decline {
+  padding: 5px;
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.approve {
+  background-color: green;
+  margin-right: 5px;
+}
+
+.decline {
+  background-color: red;
 }

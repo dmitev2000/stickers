@@ -4,6 +4,7 @@ import CartContext from "../../context/CartContext";
 import { AuthenticationContext } from "../../context/AuthenticationContext";
 import { FireErrorNotification } from "../../utils/FireNotificiation";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const CartItemComponent = ({ item }: { item: CartItem }) => {
   const CartCtx = useContext(CartContext);
@@ -11,16 +12,50 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
   const BASE_URL = "http://localhost:5000/api/cart";
 
   const RemoveItemHandler = () => {
+    Swal.fire({
+      title: `Remove ${item.sticker.title} sticker from the cart?`,
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+      confirmButtonColor: "#ff1867",
+      cancelButtonColor: "#27282c"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`${BASE_URL}/remove-item-from-cart`, {
+            userID: AuthCtx.user._id,
+            stickerID: item.sticker._id,
+          })
+          .then((res) => {
+            CartCtx.removeSticker(item);
+            FireErrorNotification(
+              `${item.sticker.title} sticker is removed from the cart!`
+            );
+          })
+          .catch((err) => console.error(err));
+      }
+    });
+  };
+
+  const IncrementQuantityHandler = () => {
     axios
-      .post(`${BASE_URL}/remove-item-from-cart`, {
+      .post(`${BASE_URL}/increment-quantity`, {
         userID: AuthCtx.user._id,
         stickerID: item.sticker._id,
       })
       .then((res) => {
-        CartCtx.removeSticker(item);
-        FireErrorNotification(
-          `${item.sticker.title} sticker is removed from the cart!`
-        );
+        CartCtx.increaseQuantity(item);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const DecrementQuantityHandler = () => {
+    axios
+      .post(`${BASE_URL}/decrement-quantity`, {
+        userID: AuthCtx.user._id,
+        stickerID: item.sticker._id,
+      })
+      .then((res) => {
+        CartCtx.decreaseQuantity(item);
       })
       .catch((err) => console.error(err));
   };
@@ -32,25 +67,22 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
           <img src={item.sticker.image} alt={item.sticker.title} />
           <div className="td-div flex-column justify-content-center">
             <p className="fw-bold">{item.sticker.title}</p>
-            <p className="text-muted">{item.sticker.sticker_type}</p>
+            <p className="text-muted">{item.sticker.tags.toString()}</p>
           </div>
         </div>
       </td>
       <td>
         <div className="td-div justify-content-center">
           <button
-            onClick={() => {
-              CartCtx.decreaseQuantity(item);
-            }}
+            onClick={DecrementQuantityHandler}
             className="quantity-changer red"
+            disabled={item.quantity <= 1}
           >
             -
           </button>
           {item.quantity}
           <button
-            onClick={() => {
-              CartCtx.increaseQuantity(item);
-            }}
+            onClick={IncrementQuantityHandler}
             className="quantity-changer black"
           >
             +

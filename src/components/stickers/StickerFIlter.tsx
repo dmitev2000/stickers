@@ -80,6 +80,16 @@ const StickerFIlter = () => {
       <button
         onClick={FilterStickers}
         className={
+          FilterCtx.filterCriteria === "Meme"
+            ? "filter-btn selected"
+            : "filter-btn"
+        }
+      >
+        Meme
+      </button>
+      <button
+        onClick={FilterStickers}
+        className={
           FilterCtx.filterCriteria === "Other"
             ? "filter-btn selected"
             : "filter-btn"
