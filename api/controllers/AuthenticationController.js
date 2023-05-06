@@ -1,5 +1,6 @@
 import UserCart from "../models/UserCartModel.js";
 import User from "../models/UserModel.js";
+import UserFavorites from "../models/UserFavoritesModel.js";
 import { CreateError } from "../utils/Error.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -25,11 +26,18 @@ export const Register = async (req, res, next) => {
     await newUser.save();
 
     const user = await User.findOne({ username: req.body.username });
+
     const newUserCart = new UserCart({
       userID: user._id,
       stickerList: [],
     });
     await newUserCart.save();
+
+    const newUserFavorites = new UserFavorites({
+      userID: user._id,
+      stickerIDs: [],
+    });
+    await newUserFavorites.save();
 
     res.status(201).json("User has been created.");
   } catch (err) {

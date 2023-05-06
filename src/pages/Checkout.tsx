@@ -1,37 +1,91 @@
-import { useState, useContext } from "react";
+import { useState, useContext, FormEvent } from "react";
 import CartContext from "../context/CartContext";
 import { AuthenticationContext } from "../context/AuthenticationContext";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { macedonian_cities } from "../utils/static_data";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { FireNotification } from "../utils/FireNotificiation";
 
 const Checkout = () => {
   const AuthCtx = useContext(AuthenticationContext);
   const CartCtx = useContext(CartContext);
+  const navigate = useNavigate();
+  const [fullname, setFullname] = useState("");
+  const [city, setCity] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone_number, setPN] = useState("");
+  const phone_pattern =
+    /^(07[0-27-9])(\d{3})(\d{3})|^(07[0-27-9])\s(\d{3})\s(\d{3})|^(07[0-27-9])-(\d{3})-(\d{3})$/;
+
+  const Purchase = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const dataToSend = CartCtx.stickerList.map((sticker: any) => {
+      return { stickerID: sticker.sticker._id, quantity: sticker.quantity };
+    });
+
+    axios
+      .post("http://localhost:5000/api/orders", {
+        userID: AuthCtx.user._id,
+        stickerList: dataToSend,
+        totalPrice: CartCtx.totalPrice,
+        shippingDetails: {
+          fullname: fullname,
+          city: city,
+          address: address,
+          phone_number: phone_number
+        },
+        estimatedDelivery: new Date().setDate(new Date().getDate() + 4)
+      })
+      .then((res) => {
+        //console.log(res.data);
+        FireNotification(res.data);
+        CartCtx.emptyCart();
+        navigate("/");
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="container">
       <h3 className="my-5">Checkout</h3>
       <div className="checkout mb-5">
         <div className="py-5 d-flex align-items-center">
-          <form className="checkout-form w-100">
-            <TextField label="Full name" className="w-100 mb-3" required />
+          <form onSubmit={Purchase} className="checkout-form w-100">
+            <TextField
+              label="Full name"
+              className="w-100 mb-3"
+              onChange={(event) => setFullname(event.target.value)}
+              required
+            />
             <Autocomplete
               disablePortal
               className="mb-3"
-              id="combo-box-demo"
               options={macedonian_cities}
+              onChange={(event: any) => setCity(event.target.innerText)}
               renderInput={(params) => (
                 <TextField {...params} required label="City" />
               )}
             />
-            <TextField label="Address" className="w-100 mb-3" required />
-            <TextField label="Card number" className="w-100 mb-3" required />
-            <div className="d-flex justify-content-between gap-3">
-              <TextField label="Valid thru" className="w-100 mb-3" required />
-              <TextField label="CVC" type="number" className="w-100 mb-3" inputProps={{min: 100, max: 999}} required />
-            </div>
-            <input type="submit" value={`Purchase $${CartCtx.totalPrice.toFixed(2)}`} />
+
+            <TextField
+              label="Address"
+              className="w-100 mb-3"
+              onChange={(event: any) => setAddress(event.target.value)}
+              required
+            />
+            <TextField
+              label="Phone number"
+              className="w-100 mb-3"
+              inputProps={{ pattern: phone_pattern }}
+              onChange={(event: any) => setPN(event.target.value)}
+              required
+            />
+            <input
+              type="submit"
+              value={`Place order $${CartCtx.totalPrice.toFixed(2)}`}
+            />
           </form>
         </div>
         <div className="py-5 d-flex align-items-center">

@@ -1,5 +1,5 @@
 import express from "express";
-import { GetAllOrders, GetOrder, GetOrdersByUser, PlaceOrder } from "../controllers/OrderController.js";
+import { ConfirmOrder, GetAllOrders, GetOrder, GetOrdersByUser, GetPlacedOrders, PlaceOrder } from "../controllers/OrderController.js";
 
 const router = express.Router();
 
@@ -9,6 +9,10 @@ router.post("/", PlaceOrder);
 
 router.get("/:id", GetOrder);
 
-router.get("/get-my-orders", GetOrdersByUser);
+router.get("/my-orders/:user_id", GetOrdersByUser);
+
+router.get("/get/placed", GetPlacedOrders);
+
+router.post("/confirm", ConfirmOrder);
 
 export default router;

@@ -8,6 +8,9 @@ import PendingStickersList from "../../components/stickers/PendingStickersList";
 import axios from "axios";
 import DashboardLoader from "../../components/loader/DashboardLoader";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
+import Badge from "@mui/material/Badge";
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import { left } from "@cloudinary/url-gen/qualifiers/textAlignment";
 
 const StickerRequests = () => {
   const ReloadCtx = useContext(ReloadDashboardContext);
@@ -45,10 +48,12 @@ const StickerRequests = () => {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
-          style={{padding: "10px"}}
+          style={{ padding: "10px" }}
         >
           <Typography sx={{ width: "33%", flexShrink: 0, fontWeight: "bold" }}>
-            Pending stickers
+            <Badge badgeContent={data.length} color="success">
+              Pending stickers <HourglassEmptyIcon style={{marginLeft: "10px"}} />
+            </Badge>
           </Typography>
           <Typography sx={{ color: "text.secondary" }}>
             Approve / decline / overview

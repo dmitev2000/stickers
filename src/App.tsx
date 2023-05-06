@@ -8,6 +8,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/admin/Dashboard";
+import MyOrders from "./pages/MyOrders";
+import PreviewOrder from "./pages/PreviewOrder";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/cart/:id" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/my-orders/:id" element={<MyOrders />} />
+      <Route path="/my-orders/preview-order/:id" element={<PreviewOrder />} />
       <Route path="/create-sticker" element={<CreateSticker />} />
       <Route path="/favorites" element={<FavoriteStickers />} />
       <Route path="/register" element={<Register />} />

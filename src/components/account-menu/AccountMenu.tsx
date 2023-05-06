@@ -110,7 +110,7 @@ const AccountMenu = () => {
           <ListItemIcon>
             <ListAltIcon fontSize="small" />
           </ListItemIcon>
-          <Link to="/my-orders" className="account-menu-link">
+          <Link to={`/my-orders/${AuthCtx.user._id}`} className="account-menu-link">
             My orders
           </Link>
         </MenuItem>

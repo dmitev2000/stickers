@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import RejectedSticker from "../models/RejectedStickerModel.js";
 import Sticker from "../models/StickerModel.js";
 import { CreateError } from "../utils/Error.js";
@@ -28,6 +29,14 @@ export const GetStickerById = async (req, res, next) => {
     next(error);
   }
 };
+
+export const GetFavoriteStickers = async (req, res, next) => {
+  try {
+    
+  } catch (error) {
+    next(error);
+  }
+}
 
 export const GetPendingStickers = async (req, res, next) => {
   try {

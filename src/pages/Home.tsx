@@ -18,7 +18,6 @@ const Home = () => {
     axios
       .get(BASE_URL)
       .then((res) => {
-        //console.log(res.data);
         setStickers(() => res.data);
         let min = res.data[0].price;
         let max = res.data[0].price;

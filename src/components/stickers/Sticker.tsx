@@ -35,7 +35,7 @@ const Sticker = ({ sticker }: { sticker: any }) => {
         quantity: value,
       })
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         CartCtx.addSticker({ sticker: sticker, quantity: value });
         FireNotification(
           `${sticker.title} (${value}) sticker added to cart successfully!`
@@ -74,37 +74,41 @@ const Sticker = ({ sticker }: { sticker: any }) => {
           <span className="fw-bold price">
             ${sticker.price.toFixed(2).toString()}
           </span>
-          <NumericStepper
-            minimumValue={1}
-            stepValue={1}
-            initialValue={INITIAL_VALUE}
-            size="sm"
-            inactiveTrackColor="#fff"
-            activeTrackColor="#fddec0"
-            activeButtonColor="#ffedd5"
-            inactiveIconColor="#fb923c"
-            hoverIconColor="#ff1867"
-            activeIconColor="#9a3412"
-            disabledIconColor="#fdba74"
-            thumbColor="#ff1867"
-            thumbShadowAnimationOnTrackHoverEnabled={false}
-            focusRingColor="#fff7ed"
-            onChange={(value) => {
-              setValue(value);
-            }}
-          />
-          <div className="d-flex justify-content-evenly gap-2">
-            <Tooltip title="Add to favorites">
-              <button className="add-to-fav" onClick={AddToFav}>
-                <FavoriteBorderIcon />
-              </button>
-            </Tooltip>
-            <Tooltip title="Add to cart">
-              <button className="add-to-cart" onClick={AddToCart}>
-                <AddShoppingCartIcon />
-              </button>
-            </Tooltip>
-          </div>
+          {AuthCtx.user && (
+            <>
+              <NumericStepper
+                minimumValue={1}
+                stepValue={1}
+                initialValue={INITIAL_VALUE}
+                size="sm"
+                inactiveTrackColor="#fff"
+                activeTrackColor="#fddec0"
+                activeButtonColor="#ffedd5"
+                inactiveIconColor="#fb923c"
+                hoverIconColor="#ff1867"
+                activeIconColor="#9a3412"
+                disabledIconColor="#fdba74"
+                thumbColor="#ff1867"
+                thumbShadowAnimationOnTrackHoverEnabled={false}
+                focusRingColor="#fff7ed"
+                onChange={(value) => {
+                  setValue(value);
+                }}
+              />
+              <div className="d-flex justify-content-evenly gap-2">
+                <Tooltip title="Add to favorites">
+                  <button className="add-to-fav" onClick={AddToFav}>
+                    <FavoriteBorderIcon />
+                  </button>
+                </Tooltip>
+                <Tooltip title="Add to cart">
+                  <button className="add-to-cart" onClick={AddToCart}>
+                    <AddShoppingCartIcon />
+                  </button>
+                </Tooltip>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

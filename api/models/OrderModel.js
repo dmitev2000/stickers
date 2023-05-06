@@ -5,16 +5,34 @@ const Schema = mongoose.Schema;
 const OrderSchema = new Schema(
   {
     userID: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: [true, "There is no user ID."],
     },
     stickerList: {
       type: Array,
-      required: [true, "There are no items."]
+      required: [true, "There are no items."],
     },
     totalPrice: {
       type: Number,
       required: [true, "Total price must be calculated."],
+    },
+    status: {
+      type: String,
+      default: "Placed",
+    },
+    estimatedDelivery: {
+      type: Date,
+      required: [true, "Please provide a estimated delivery date."],
+    },
+    confirmationDate: {
+      type: Date,
+    },
+    rating: {
+      type: Number,
+    },
+    shippingDetails: {
+      type: Object,
+      required: [true, "You must provide shipping details."],
     },
   },
   { timestamps: true }

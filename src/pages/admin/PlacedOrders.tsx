@@ -7,11 +7,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import DashboardLoader from "../../components/loader/DashboardLoader";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
-import RejectedStickerList from "../../components/stickers/RejectedStickerList";
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import Badge from "@mui/material/Badge";
-import BlockIcon from '@mui/icons-material/Block';
 
-const RejectedStickers = () => {
+const PlacedOrders = () => {
   const ReloadCtx = useContext(ReloadDashboardContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [loading, setLoading] = useState(true);
@@ -26,7 +25,7 @@ const RejectedStickers = () => {
   useEffect(() => {
     setError(null);
     axios
-      .get("http://localhost:5000/api/rejected/get")
+      .get("http://localhost:5000/api/orders/get/placed")
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -35,7 +34,7 @@ const RejectedStickers = () => {
         setLoading(false);
         setError(err.response.data);
       });
-  }, [ReloadCtx.reloadRejectedStickers]);
+  }, [ReloadCtx.reloadPlacedOrders]);
 
   return (
     <div className="my-4">
@@ -50,12 +49,12 @@ const RejectedStickers = () => {
           style={{ padding: "10px" }}
         >
           <Typography sx={{ width: "33%", flexShrink: 0, fontWeight: "bold" }}>
-            <Badge badgeContent={data.length} color="error">
-              Rejected stickers <BlockIcon style={{marginLeft: "10px"}} />
+            <Badge badgeContent={data.length} color="success">
+              Placed orders <SummarizeIcon style={{marginLeft: "10px"}} />
             </Badge>
           </Typography>
           <Typography sx={{ color: "text.secondary" }}>
-            List of all rejected (inappropriate) stickers
+            List of all placed orders / Confirm orders
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -69,10 +68,10 @@ const RejectedStickers = () => {
             </div>
           ) : data.length === 0 ? (
             <p className="text-muted">
-              There are no rejected stickers.
+              There are no placed orders.
             </p>
           ) : (
-            <RejectedStickerList list={data} />
+            <p>{data.length}</p>
           )}
           <button
             className="btn btn-warning"
@@ -88,4 +87,4 @@ const RejectedStickers = () => {
   );
 };
 
-export default RejectedStickers;
+export default PlacedOrders;
