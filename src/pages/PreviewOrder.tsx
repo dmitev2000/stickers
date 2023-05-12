@@ -353,7 +353,7 @@ const PreviewOrder = () => {
                       ) : (
                         <span className="text-muted">
                           Your order should be delivered on{" "}
-                          {order.estimatedDelivery.substring(0, 10)}
+                          {new Date(order.estimatedDelivery).toString().substring(4, 15)}
                         </span>
                       )}
                     </div>

@@ -39,6 +39,7 @@
 .status span {
   min-width: 120px;
   text-align: center;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 .order-statistics-wrapper {
@@ -82,7 +83,7 @@
   width: 60px;
   height: 60px;
   border: solid 2px #ff1867;
-  border-radius: 5PX;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +117,7 @@
 
 .ats-div span {
   font-size: 30px;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
 
 .stats h3 {
@@ -210,7 +211,8 @@
   background-color: #ff1867;
 }
 
-.rating-submit, .clear-rating {
+.rating-submit,
+.clear-rating {
   border: none;
   outline: none;
   background-color: transparent;
@@ -218,7 +220,7 @@
   margin: 0 10px;
   color: #ff1867;
   height: fit-content;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   text-transform: lowercase;
 }
 
@@ -227,8 +229,21 @@
   margin: 0;
 }
 
-.rating-submit:hover, .clear-rating:hover {
+.rating-submit:hover,
+.clear-rating:hover {
   text-decoration: underline;
+}
+
+.confirmed {
+  color: limegreen;
+}
+
+.delivered {
+  color: cadetblue;
+}
+
+.placed {
+  color: #ff1867;
 }
 
 @media screen and (max-width: 1200px) {

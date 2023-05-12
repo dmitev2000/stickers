@@ -35,10 +35,10 @@ const Order = ({ orderDetails }: { orderDetails: OrderType }) => {
           <span
             className={
               orderDetails.status === "Placed"
-                ? "bg-warning p-2 rounded"
+                ? "placed p-2 rounded"
                 : new Date(orderDetails.estimatedDelivery) <= new Date()
-                ? "bg-primary p-2 rounded text-light"
-                : "bg-success p-2 rounded text-light"
+                ? "delivered p-2 rounded"
+                : "confirmed p-2 rounded"
             }
           >
             {new Date(orderDetails.estimatedDelivery).getTime() <=
