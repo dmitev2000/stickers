@@ -5,7 +5,7 @@ const ReloadDashboardContext = createContext({
   reloadRejectedStickers: false,
   reloadPlacedOrders: false,
   UpdateReloadPendingStickers: () => {},
-  UpdateReloadRejectedSrtickers: () => {},
+  UpdateReloadRejectedStickers: () => {},
   UpdateReloadPlacedOrders: () => {},
 });
 
@@ -18,7 +18,7 @@ export const ReloadDashboardContextProvider = (props: any) => {
     setReloadPendingStickers((prev) => !prev);
   };
 
-  const UpdateReloadRejectedSrtickers = () => {
+  const UpdateReloadRejectedStickers = () => {
     setReloadRejectedStickers((prev) => !prev);
   };
 
@@ -31,7 +31,7 @@ export const ReloadDashboardContextProvider = (props: any) => {
     reloadRejectedStickers,
     reloadPlacedOrders,
     UpdateReloadPendingStickers,
-    UpdateReloadRejectedSrtickers,
+    UpdateReloadRejectedStickers,
     UpdateReloadPlacedOrders,
   };
 

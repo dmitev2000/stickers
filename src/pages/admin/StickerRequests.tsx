@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import Accordion from "@mui/material/Accordion";
+import Badge from "@mui/material/Badge";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PendingStickersList from "../../components/stickers/PendingStickersList";
-import axios from "axios";
 import DashboardLoader from "../../components/loader/DashboardLoader";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
-import Badge from "@mui/material/Badge";
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import { left } from "@cloudinary/url-gen/qualifiers/textAlignment";
+import axios from "axios";
 
 const StickerRequests = () => {
   const ReloadCtx = useContext(ReloadDashboardContext);
@@ -52,7 +51,8 @@ const StickerRequests = () => {
         >
           <Typography sx={{ width: "33%", flexShrink: 0, fontWeight: "bold" }}>
             <Badge badgeContent={data.length} color="success">
-              Pending stickers <HourglassEmptyIcon style={{marginLeft: "10px"}} />
+              Pending stickers{" "}
+              <HourglassEmptyIcon style={{ marginLeft: "10px" }} />
             </Badge>
           </Typography>
           <Typography sx={{ color: "text.secondary" }}>
@@ -74,12 +74,12 @@ const StickerRequests = () => {
             <PendingStickersList list={data} />
           )}
           <button
-            className="btn btn-warning"
+            className="btn btn-warning fw-bold"
             onClick={() => {
               ReloadCtx.UpdateReloadPendingStickers();
             }}
           >
-            Reload component
+            Reload
           </button>
         </AccordionDetails>
       </Accordion>

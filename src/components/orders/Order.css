@@ -1,20 +1,246 @@
 .order {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    box-shadow: 0 0 15px gray;
-    padding: 10px;
-    border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 0 10px gray;
+  padding: 10px 25px;
+  border-radius: 5px;
 }
 
 .order-details-link {
-    text-decoration: none;
-    color: #ff1867;
-    border: solid 2px;
-    padding: 5px 10px;
+  text-decoration: none;
+  color: #ff1867;
+  border: solid 2px;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .order-details-link:hover {
-    color: #ff1867;
+  background-color: #ff1867;
+  color: white;
+}
+
+.td-data {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.status {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status span {
+  min-width: 120px;
+  text-align: center;
+}
+
+.order-statistics-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.order-statistics-wrapper > div {
+  box-shadow: 0 0 3px gray;
+  padding: 15px 25px 15px 15px;
+  border-radius: 5px;
+}
+
+.ats-wrapper {
+  min-height: 200px;
+  display: grid;
+  gap: 10px;
+  place-content: center;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ats-div {
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px gray;
+  position: relative;
+  min-height: 130px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ats-div > div {
+  position: absolute;
+  top: -30px;
+  left: 20px;
+  z-index: 11;
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  border: solid 2px #ff1867;
+  border-radius: 5PX;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ats-div .from-to {
+  position: absolute;
+  left: 10px;
+  bottom: -10px;
+  border-top: solid 2px #ff1867;
+  width: calc(100% - 15px);
+  font-size: 12px;
+  text-align: center;
+}
+
+.ats-div .stat-title {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  background-color: #ff1867;
+  color: white;
+  font-weight: bold;
+  min-width: 70px;
+  text-align: center;
+}
+
+.ats-div span {
+  font-size: 30px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.stats h3 {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  text-align: center;
+}
+
+.order-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.order-details {
+  box-shadow: 0 0 5px gray;
+  max-height: 500px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-radius: 5px;
+}
+
+.order-products {
+  box-shadow: 0 0 5px gray;
+  padding: 25px;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.track-order {
+  box-shadow: 0 0 5px gray;
+  padding: 15px 25px;
+  margin: 10px auto;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 600px;
+}
+
+.step {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 25px;
+}
+
+.step p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.step-inv {
+  opacity: 0.6;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  background-color: #ff1867;
+  border-radius: 50%;
+  position: relative;
+}
+
+.circle-first {
+  width: 20px;
+  height: 20px;
+  background-color: #ff1867;
+  border-radius: 50%;
+}
+
+.circle::before {
+  content: "";
+  width: 7px;
+  height: 88px;
+  background-color: #ff1867;
+  position: absolute;
+  left: 7px;
+  bottom: 2px;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  padding: 15px;
+  background-color: #ff1867;
+}
+
+.rating-submit, .clear-rating {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0 10px;
+  color: #ff1867;
+  height: fit-content;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  text-transform: lowercase;
+}
+
+.clear-rating {
+  color: #27282c;
+  margin: 0;
+}
+
+.rating-submit:hover, .clear-rating:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 1200px) {
+  .order-preview {
+    grid-template-columns: 1fr;
+  }
+
+  .order-products {
+    overflow-y: visible;
+  }
+
+  .track-order {
+    max-width: 100%;
+  }
 }

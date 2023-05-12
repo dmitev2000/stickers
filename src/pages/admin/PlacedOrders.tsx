@@ -9,6 +9,7 @@ import DashboardLoader from "../../components/loader/DashboardLoader";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Badge from "@mui/material/Badge";
+import PlacedOrdersList from "../../components/orders/PlacedOrdersList";
 
 const PlacedOrders = () => {
   const ReloadCtx = useContext(ReloadDashboardContext);
@@ -71,15 +72,15 @@ const PlacedOrders = () => {
               There are no placed orders.
             </p>
           ) : (
-            <p>{data.length}</p>
+            <PlacedOrdersList placedOrders={data} />
           )}
           <button
-            className="btn btn-warning"
+            className="btn btn-warning fw-bold"
             onClick={() => {
-              ReloadCtx.UpdateReloadRejectedSrtickers();
+              ReloadCtx.UpdateReloadPlacedOrders();
             }}
           >
-            Reload component
+            Reload
           </button>
         </AccordionDetails>
       </Accordion>

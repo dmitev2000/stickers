@@ -75,12 +75,12 @@ const RejectedStickers = () => {
             <RejectedStickerList list={data} />
           )}
           <button
-            className="btn btn-warning"
+            className="btn btn-warning fw-bold"
             onClick={() => {
-              ReloadCtx.UpdateReloadRejectedSrtickers();
+              ReloadCtx.UpdateReloadRejectedStickers();
             }}
           >
-            Reload component
+            Reload
           </button>
         </AccordionDetails>
       </Accordion>

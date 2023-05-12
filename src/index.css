@@ -126,6 +126,13 @@ html {
   min-height: calc(100vh - 290px);
 }
 
+.loader-wrapper2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height:  calc(100vh - 90px);
+}
+
 .favs-coming-soon {
   margin-top: 25px;
   min-height: calc(100vh - 315px);
@@ -420,86 +427,20 @@ tfoot {
   padding: 0 10px;
 }
 
-.order-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-}
-
-.order-details {
-  box-shadow: 0 0 5px gray;
-  padding: 15px;
-  margin-bottom: 25px;
+.link {
+  text-decoration: none;
+  color: white;
+  border: solid 2px #ff1867;
+  padding: 10px;
   border-radius: 5px;
-}
-
-.order-products {
-  box-shadow: 0 0 5px gray;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 25px;
-}
-
-.track-order {
-  box-shadow: 0 0 5px gray;
-  padding: 15px 25px;
-  margin: 10px auto;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 600px;
-}
-
-.step {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 25px;
-}
-
-.step p {
-  margin: 0;
-  font-size: 18px;
-}
-
-.step-inv {
-  opacity: 0.6;
-}
-
-.circle {
-  width: 20px;
-  height: 20px;
   background-color: #ff1867;
-  border-radius: 50%;
-  position: relative;
+  font-weight: bold;
 }
 
-.circle-first {
-  width: 20px;
-  height: 20px;
-  background-color: #ff1867;
-  border-radius: 50%;
-}
-
-.circle::before {
-  content: "";
-  width: 7px;
-  height: 88px;
-  background-color: #ff1867;
-  position: absolute;
-  left: 7px;
-  bottom: 2px;
-}
-
-.icon-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  padding: 15px;
-  background-color: #ff1867;
+.link:hover {
+  color: white;
+  opacity: .9;
+  box-shadow: 0 0 5px #ff1867;
 }
 
 @media screen and (max-width: 780px) {

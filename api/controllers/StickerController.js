@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import RejectedSticker from "../models/RejectedStickerModel.js";
 import Sticker from "../models/StickerModel.js";
 import { CreateError } from "../utils/Error.js";
@@ -30,13 +29,30 @@ export const GetStickerById = async (req, res, next) => {
   }
 };
 
-export const GetFavoriteStickers = async (req, res, next) => {
+export const GetStickersFromOrder = async (req, res, next) => {
   try {
-    
+    const stickerIDs = req.body.stickerIDs.map((s) => {
+      return s.stickerID;
+    });
+
+    const stickers = await Sticker.find({ _id: { $in: stickerIDs } });
+
+    const dataToReturn = stickers.map((s, index) => {
+      return { sticker: s, quantity: req.body.stickerIDs[index].quantity };
+    });
+
+    res.status(200).json(dataToReturn);
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const GetFavoriteStickers = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const GetPendingStickers = async (req, res, next) => {
   try {

@@ -48,7 +48,7 @@ mongoose.connect(db_url, { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once("open", () => {
-  console.log("MongoDB connection established.");
+  console.log("MongoDB connected.");
   app.listen(port, () => {
     console.log(`API started on port: ${port}.`);
   });

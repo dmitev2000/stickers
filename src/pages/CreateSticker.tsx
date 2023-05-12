@@ -177,7 +177,7 @@ const CreateSticker = () => {
                 className="d-flex justify-content-center align-items-center flex-column gap-2 flex-wrap"
               >
                 <h3 className="m-0 w-100" style={{fontSize: "2em"}}>{title}</h3>
-                <span>
+                <span className="text-center">
                   <i className="bi bi-camera"></i>
                   {company}
                 </span>

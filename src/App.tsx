@@ -10,6 +10,7 @@ import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/admin/Dashboard";
 import MyOrders from "./pages/MyOrders";
 import PreviewOrder from "./pages/PreviewOrder";
+import OrderStatistics from "./pages/admin/OrderStatistics";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />
+      <Route path="/admin/order-statistics" element={<OrderStatistics />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

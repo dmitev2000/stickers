@@ -41,6 +41,10 @@ export interface OrderType {
   totalPrice: number;
   updatedAt: Date;
   createdAt: Date;
+  status: string;
+  shippingDetails: ShippingDetails;
+  confirmationDate: string | null;
+  estimatedDelivery: string;
   __v: number;
 }
 
@@ -58,7 +62,7 @@ export interface ShippingDetails {
 
 export interface PreviewOrderInterface {
   orderID: string;
-  stickerDetails: StickerDetails[];
+  stickersDetails: StickerDetails[];
   totalPrice: number;
   shippingDetails: ShippingDetails;
   status: string;
@@ -66,4 +70,35 @@ export interface PreviewOrderInterface {
   estimatedDelivery: string;
   date: string;
   confirmationDate: string | null;
+}
+
+export interface PlacedOrderInterface {
+  createdAt: string;
+  estimatedDelivery: string;
+  _id: string;
+  __v: number;
+  shippingDetails: ShippingDetails;
+  status: string;
+  totalPrice: number;
+  updatedAt: string;
+  userID: string;
+  stickerList: StickerInOrder[];
+}
+
+export interface OrderStatisticsRecord {
+  name: string;
+  profit: number;
+  stickers_sold: number;
+  num_orders: number;
+}
+
+export interface CategoryChartData {
+  name: string;
+  value: number;
+}
+
+export interface AllTimeStatisticsInterface {
+  totalOrders: number;
+  totalProfit: number;
+  totalStickers: number;
 }

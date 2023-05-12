@@ -15,7 +15,6 @@ const MyOrders = () => {
     axios
       .get(`http://localhost:5000/api/orders/my-orders/${AuthCtx.user._id}`)
       .then((res) => {
-        console.log(res.data);
         setOrders(res.data);
         setLoading(false);
       })
@@ -24,7 +23,7 @@ const MyOrders = () => {
 
   if (loading) {
     return (
-      <div className="loader-wrapper">
+      <div className="loader-wrapper2">
         <Loader />
       </div>
     );
@@ -46,10 +45,10 @@ const MyOrders = () => {
           </Link>
         </div>
       ) : (
-        <>
+        <div className="pb-5">
           <h1 className="my-5">My Orders</h1>
           <OrderList orders={orders} />
-        </>
+        </div>
       )}
     </div>
   );

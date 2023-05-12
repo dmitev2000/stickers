@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthenticationContext } from "../../context/AuthenticationContext";
 import AccountMenu from "../account-menu/AccountMenu";
-import logo from "../../assets/red-bull.png";
 import CartIndicator from "../cart/CartIndicator";
 import LoginIcon from "@mui/icons-material/Login";
 import Tooltip from "@mui/material/Tooltip";
@@ -15,7 +14,6 @@ const Navbar = () => {
   return (
     <nav>
       <Link to="/" className="logo">
-        {/* <img src={logo} alt="logo" /> */}
         <span>The</span>
         Stickers
       </Link>
@@ -23,7 +21,7 @@ const Navbar = () => {
         {!AuthCtx.user ? (
           <Link to="/login">
             <Tooltip title="Login">
-              <LoginIcon color="error" />
+              <LoginIcon color="error" fontSize="large" />
             </Tooltip>
           </Link>
         ) : (
