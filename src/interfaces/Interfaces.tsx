@@ -102,3 +102,13 @@ export interface AllTimeStatisticsInterface {
   totalProfit: number;
   totalStickers: number;
 }
+
+export interface UserInterface {
+  _id: string;
+  username: string;
+  role: string;
+  totalOrders: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}

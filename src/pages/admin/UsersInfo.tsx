@@ -3,13 +3,13 @@ import Accordion from "@mui/material/Accordion";
 import Badge from "@mui/material/Badge";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import Person2Icon from '@mui/icons-material/Person2';
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import PendingStickersList from "../../components/stickers/PendingStickersList";
 import DashboardLoader from "../../components/loader/DashboardLoader";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
 import axios from "axios";
+import UsersList from "../../components/users/UsersList";
 
 const StickerRequests = () => {
   const ReloadCtx = useContext(ReloadDashboardContext);
@@ -26,7 +26,7 @@ const StickerRequests = () => {
   useEffect(() => {
     setError(null);
     axios
-      .get("http://localhost:5000/api/stickers/get/pending")
+      .get("http://localhost:5000/api/users")
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -35,7 +35,7 @@ const StickerRequests = () => {
         setLoading(false);
         setError(err.response.data);
       });
-  }, [ReloadCtx.reloadPendingStickers]);
+  }, [ReloadCtx.reloadUsers]);
 
   return (
     <div className="mb-4">
@@ -51,12 +51,12 @@ const StickerRequests = () => {
         >
           <Typography sx={{ width: "33%", flexShrink: 0, fontWeight: "bold" }}>
             <Badge badgeContent={data.length} color="success">
-              Pending stickers{" "}
-              <HourglassEmptyIcon style={{ marginLeft: "10px" }} />
+              Active customers{" "}
+              <Person2Icon style={{ marginLeft: "10px" }} />
             </Badge>
           </Typography>
           <Typography sx={{ color: "text.secondary" }}>
-            Approve / decline / overview
+            Overview / Delete users
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -69,14 +69,14 @@ const StickerRequests = () => {
               <p className="text-danger m-0">{error}</p>
             </div>
           ) : data.length === 0 ? (
-            <p className="text-muted">There are no pending requests.</p>
+            <p className="text-muted">There are no users.</p>
           ) : (
-            <PendingStickersList list={data} />
+            <UsersList users={data} />
           )}
           <button
             className="reload-btn fw-bold"
             onClick={() => {
-              ReloadCtx.UpdateReloadPendingStickers();
+              ReloadCtx.UpdateReloadUsers();
             }}
           >
             Reload

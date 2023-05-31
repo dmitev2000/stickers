@@ -46,7 +46,7 @@ const MyOrders = () => {
         </div>
       ) : (
         <div className="pb-5">
-          <h1 className="my-5">My Orders</h1>
+          <h1 className="my-5 dashboard-h">My Orders</h1>
           <OrderList orders={orders} />
         </div>
       )}

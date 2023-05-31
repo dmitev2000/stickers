@@ -116,7 +116,7 @@ const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
           style={{ minHeight: "50px" }}
         >
           <Tooltip title="View products">
-            <button className="btn btn-warning" onClick={handleClickOpenP}>
+            <button className="reload-btn" onClick={handleClickOpenP}>
               <ShoppingBasketIcon />
             </button>
           </Tooltip>
@@ -146,7 +146,7 @@ const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
           style={{ minHeight: "50px" }}
         >
           <Tooltip title="Shipping details">
-            <button className="btn btn-warning" onClick={handleClickOpenSD}>
+            <button className="reload-btn" onClick={handleClickOpenSD}>
               <LocalShippingIcon />
             </button>
           </Tooltip>
@@ -217,7 +217,7 @@ const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
           style={{ minHeight: "50px" }}
         >
           <Tooltip title="Confirm">
-            <button className="approve" onClick={ConfirmOrder}>
+            <button className="approve rounded" onClick={ConfirmOrder}>
               <AddTaskIcon />
             </button>
           </Tooltip>

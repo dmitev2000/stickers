@@ -154,6 +154,7 @@ const CreateSticker = () => {
             <option value="Framework">Framework</option>
             <option value="Service">Service</option>
             <option value="Meme">Meme</option>
+            <option value="OS">OS</option>
             <option value="Other">Other</option>
           </select>
           <input

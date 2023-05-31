@@ -443,6 +443,12 @@ tfoot {
   box-shadow: 0 0 5px #ff1867;
 }
 
+.dashboard-h {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
 @media screen and (max-width: 780px) {
   .create-sticker {
     grid-template-columns: 1fr;

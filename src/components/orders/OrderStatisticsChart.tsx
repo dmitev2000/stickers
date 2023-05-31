@@ -53,9 +53,9 @@ const OrderStatisticsChart = () => {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="profit" fill="#8884d8" />
+      <Bar dataKey="profit" fill="#ff1867" />
       <Bar dataKey="stickers_sold" fill="#82ca9d" />
-      <Bar dataKey="num_orders" fill="#00bfff" />
+      <Bar dataKey="num_orders" fill="#27282c" />
     </BarChart>
   );
 };

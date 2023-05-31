@@ -77,7 +77,7 @@ const RejectedSticker = ({ item }: { item: any }) => {
           style={{ minHeight: "100px" }}
         >
           <Tooltip title="View reason">
-            <button className="btn btn-warning" onClick={handleClickOpen}>
+            <button className="reload-btn" onClick={handleClickOpen}>
               <HelpCenterIcon />
             </button>
           </Tooltip>

@@ -30,7 +30,7 @@ const Checkout = () => {
       .post("http://localhost:5000/api/orders", {
         userID: AuthCtx.user._id,
         stickerList: dataToSend,
-        totalPrice: CartCtx.totalPrice,
+        totalPrice: CartCtx.totalPrice.toFixed(2),
         shippingDetails: {
           fullname: fullname,
           city: city,

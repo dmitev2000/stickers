@@ -231,6 +231,7 @@ export const StatisticsByCategory = async (req, res, next) => {
     let service = 0;
     let tooling = 0;
     let protocol = 0;
+    let os = 0;
 
     orders.forEach((order) => {
       order.stickerList.forEach((sticker) => {
@@ -258,6 +259,9 @@ export const StatisticsByCategory = async (req, res, next) => {
           }
           if (current[0].tags.includes("Protocol")) {
             protocol++;
+          }
+          if (current[0].tags.includes("OS")) {
+            os++;
           }
         }
       });
@@ -292,6 +296,10 @@ export const StatisticsByCategory = async (req, res, next) => {
         name: "Protocol",
         value: protocol,
       },
+      {
+        name: "OS",
+        value: os,
+      },
     ]);
   } catch (error) {
     next(error);
@@ -300,7 +308,7 @@ export const StatisticsByCategory = async (req, res, next) => {
 
 export const GetAllTimeStatistics = async (req, res, next) => {
   try {
-    const orders = await Order.find({});
+    const orders = await Order.find({ status: "Confirmed" });
     const totalProfit = orders.reduce((accumulator, value) => {
       return accumulator + value.totalPrice;
     }, 0);
@@ -330,6 +338,38 @@ export const SetRating = async (req, res, next) => {
     await Order.updateOne({ _id: orderID }, { $set: { rating: +rating } });
 
     res.status(200).json("Order rating updated.");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const CurrentMonthStatistics = async (req, res, next) => {
+  try {
+    const currentMonth = new Date().getMonth() + 1;
+
+    const orders = await Order.find({
+      status: "Confirmed",
+      createdAt: {
+        $gte: new Date(new Date().getFullYear(), currentMonth - 1, 1),
+        $lt: new Date(new Date().getFullYear(), currentMonth, 1),
+      },
+    });
+    const totalProfit = orders.reduce((accumulator, value) => {
+      return accumulator + value.totalPrice;
+    }, 0);
+    const totalStickers = orders.reduce((accumulator, value) => {
+      return (
+        accumulator +
+        value.stickerList.reduce((acc2, val2) => {
+          return acc2 + val2.quantity;
+        }, 0)
+      );
+    }, 0);
+    res.status(200).json({
+      totalOrders: orders.length,
+      totalProfit: +totalProfit.toFixed(2),
+      totalStickers: totalStickers,
+    });
   } catch (error) {
     next(error);
   }

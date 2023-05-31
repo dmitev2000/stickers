@@ -75,7 +75,7 @@ const PlacedOrders = () => {
             <PlacedOrdersList placedOrders={data} />
           )}
           <button
-            className="btn btn-warning fw-bold"
+            className="reload-btn fw-bold"
             onClick={() => {
               ReloadCtx.UpdateReloadPlacedOrders();
             }}

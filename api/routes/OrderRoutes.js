@@ -1,6 +1,7 @@
 import express from "express";
 import {
   ConfirmOrder,
+  CurrentMonthStatistics,
   GetAllOrders,
   GetAllTimeStatistics,
   GetOrder,
@@ -29,6 +30,8 @@ router.get("/get/statistics", GetOrderStatistics);
 router.get("/get/all-time-statistics", GetAllTimeStatistics);
 
 router.get("/get/category-statistics", StatisticsByCategory);
+
+router.get("/get/current-month-statistics", CurrentMonthStatistics);
 
 router.post("/confirm", ConfirmOrder);
 

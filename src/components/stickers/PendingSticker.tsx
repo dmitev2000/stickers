@@ -46,7 +46,7 @@ const PendingSticker = ({ item }: { item: any }) => {
         setOpen(false);
         ReloadCtx.UpdateReloadPendingStickers();
         if (status === "Rejected") {
-          ReloadCtx.UpdateReloadRejectedSrtickers();
+          ReloadCtx.UpdateReloadRejectedStickers();
         }
       })
       .catch((err) => console.log(err.message));
@@ -70,7 +70,7 @@ const PendingSticker = ({ item }: { item: any }) => {
           className="d-flex align-items-center"
           style={{ minHeight: "100px" }}
         >
-          ${item.price}
+          ${item.price.toFixed(2)}
         </div>
       </td>
       <td>
@@ -103,12 +103,12 @@ const PendingSticker = ({ item }: { item: any }) => {
           style={{ minHeight: "100px" }}
         >
           <Tooltip title="Confirm">
-            <button className="approve" onClick={ReviewSticker}>
+            <button className="approve rounded" onClick={ReviewSticker}>
               <AddTaskIcon />
             </button>
           </Tooltip>
           <Tooltip title="Reject">
-            <button className="decline" onClick={handleClickOpen}>
+            <button className="decline rounded" onClick={handleClickOpen}>
               <CancelIcon />
             </button>
           </Tooltip>

@@ -4,15 +4,18 @@ const ReloadDashboardContext = createContext({
   reloadPendingStickers: false,
   reloadRejectedStickers: false,
   reloadPlacedOrders: false,
+  reloadUsers: false,
   UpdateReloadPendingStickers: () => {},
   UpdateReloadRejectedStickers: () => {},
   UpdateReloadPlacedOrders: () => {},
+  UpdateReloadUsers: () => {},
 });
 
 export const ReloadDashboardContextProvider = (props: any) => {
   const [reloadPendingStickers, setReloadPendingStickers] = useState(false);
   const [reloadRejectedStickers, setReloadRejectedStickers] = useState(false);
   const [reloadPlacedOrders, setReloadPlacedOrders] = useState(false);
+  const [reloadUsers, setReloadUsers] = useState(false);
 
   const UpdateReloadPendingStickers = () => {
     setReloadPendingStickers((prev) => !prev);
@@ -26,13 +29,19 @@ export const ReloadDashboardContextProvider = (props: any) => {
     setReloadPlacedOrders((prev) => !prev);
   };
 
+  const UpdateReloadUsers = () => {
+    setReloadUsers((prev) => !prev);
+  };
+
   const context = {
     reloadPendingStickers,
     reloadRejectedStickers,
     reloadPlacedOrders,
+    reloadUsers,
     UpdateReloadPendingStickers,
     UpdateReloadRejectedStickers,
     UpdateReloadPlacedOrders,
+    UpdateReloadUsers,
   };
 
   return (

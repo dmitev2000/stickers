@@ -55,7 +55,7 @@
 }
 
 .ats-wrapper {
-  min-height: 200px;
+  min-height: 250px;
   display: grid;
   gap: 10px;
   place-content: center;
@@ -198,7 +198,7 @@
   height: 88px;
   background-color: #ff1867;
   position: absolute;
-  left: 7px;
+  left: 6.5px;
   bottom: 2px;
 }
 
@@ -257,5 +257,11 @@
 
   .track-order {
     max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .order-statistics-wrapper {
+    grid-template-columns: 1fr;
   }
 }

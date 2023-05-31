@@ -251,7 +251,7 @@ const PreviewOrder = () => {
                       order.confirmationDate &&
                       CalcDateDiff(
                         new Date(order.confirmationDate.toString()),
-                        2
+                        1
                       )
                         ? "step"
                         : "step step-inv"
@@ -278,8 +278,8 @@ const PreviewOrder = () => {
                       order.confirmationDate &&
                       (CalcDateDiff(
                         new Date(order.confirmationDate.toString()),
-                        3,
-                        4
+                        2,
+                        3
                       ) ||
                         new Date(order.estimatedDelivery) <= new Date())
                         ? "step"
