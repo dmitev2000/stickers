@@ -112,3 +112,9 @@ export interface UserInterface {
   updatedAt: string;
   __v: number;
 }
+
+export interface RatingStatsInterface {
+  totalOrders: number;
+  ratedOrders: number;
+  avgRating: number;
+}

@@ -1,7 +1,8 @@
 import AllTimeStatistics from "../../components/orders/AllTimeStatistics";
 import OrderStatisticsChart from "../../components/orders/OrderStatisticsChart";
 import OrderStatisticsTagsChart from "../../components/orders/OrderStatisticsTagsChart";
-import CurrentMonthStats from '../../components/orders/CurrentMonthStats';
+import CurrentMonthStats from "../../components/orders/CurrentMonthStats";
+import RatingStats from "../../components/orders/RatingStats";
 
 const OrderStatistics = () => {
   return (
@@ -32,6 +33,10 @@ const OrderStatistics = () => {
         <div>
           <h3 className="mb-4">Sold stickers by categories:</h3>
           <OrderStatisticsTagsChart />
+        </div>
+        <div>
+          <h3 className="mb-4">Rating stats</h3>
+          <RatingStats />
         </div>
       </div>
     </div>

@@ -374,3 +374,25 @@ export const CurrentMonthStatistics = async (req, res, next) => {
     next(error);
   }
 };
+
+export const RatingStats = async (req, res, next) => {
+  try {
+    const totalOrders = (await Order.find({})).length;
+
+    const rated_orders = await Order.find({
+      rating: { $ne: null, $exists: true },
+    });
+
+    const rating_sum = rated_orders.reduce((accumulator, current_value) => {
+      return (accumulator += current_value.rating);
+    }, 0);
+
+    res.status(200).json({
+      totalOrders: totalOrders,
+      ratedOrders: rated_orders.length,
+      avgRating: +(rating_sum / rated_orders.length).toFixed(2),
+    });
+  } catch (error) {
+    next(error);
+  }
+};

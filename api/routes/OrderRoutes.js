@@ -9,6 +9,7 @@ import {
   GetOrdersByUser,
   GetPlacedOrders,
   PlaceOrder,
+  RatingStats,
   SetRating,
   StatisticsByCategory,
 } from "../controllers/OrderController.js";
@@ -32,6 +33,8 @@ router.get("/get/all-time-statistics", GetAllTimeStatistics);
 router.get("/get/category-statistics", StatisticsByCategory);
 
 router.get("/get/current-month-statistics", CurrentMonthStatistics);
+
+router.get("/get/rating-stats", RatingStats);
 
 router.post("/confirm", ConfirmOrder);
 
