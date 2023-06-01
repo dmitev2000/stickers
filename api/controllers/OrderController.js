@@ -377,7 +377,7 @@ export const CurrentMonthStatistics = async (req, res, next) => {
 
 export const RatingStats = async (req, res, next) => {
   try {
-    const totalOrders = (await Order.find({})).length;
+    const totalOrders = (await Order.find({ status: "Confirmed"})).length;
 
     const rated_orders = await Order.find({
       rating: { $ne: null, $exists: true },

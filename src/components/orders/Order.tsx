@@ -1,5 +1,6 @@
 import { OrderType } from "../../interfaces/Interfaces";
 import InfoIcon from "@mui/icons-material/Info";
+import StarIcon from "@mui/icons-material/Star";
 import Tooltip from "@mui/material/Tooltip";
 import { Link } from "react-router-dom";
 import "./Order.css";
@@ -48,6 +49,18 @@ const Order = ({ orderDetails }: { orderDetails: OrderType }) => {
           </span>
         </div>
       </td>
+      <td>
+        <div className="td-data justify-content-center">
+          {orderDetails.rating ? (
+            <>
+              <StarIcon color="warning" />
+              <p className="mb-0 table-rating">{orderDetails.rating}</p>
+            </>
+          ) : (
+            <p className="mb-0 not-rated table-rating">Not rated yet</p>
+          )}
+        </div>
+      </td>
       <td className="text-center">
         <div className="td-data justify-content-center">
           <Link
@@ -55,7 +68,7 @@ const Order = ({ orderDetails }: { orderDetails: OrderType }) => {
             className="btn text-muted"
           >
             <Tooltip title="Details">
-              <InfoIcon />
+              <InfoIcon color="warning" />
             </Tooltip>
           </Link>
         </div>

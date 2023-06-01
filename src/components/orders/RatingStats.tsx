@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { RatingStatsInterface } from "../../interfaces/Interfaces";
-import StarPurple500Icon from '@mui/icons-material/StarPurple500';
-import PercentIcon from '@mui/icons-material/Percent';
+import StarPurple500Icon from "@mui/icons-material/StarPurple500";
+import PercentIcon from "@mui/icons-material/Percent";
+import StarIcon from "@mui/icons-material/Star";
 import Tooltip from "@mui/material/Tooltip";
 import Loader from "../loader/Loader";
 
@@ -46,9 +47,10 @@ const RatingStats = () => {
         </div>
         <span className="mb-2">
           {Number(data?.ratedOrders) && Number(data?.totalOrders)
-            ? ((Number(data?.ratedOrders) / Number(data?.totalOrders)) * 100).toFixed(
-                2
-              ) + "%"
+            ? (
+                (Number(data?.ratedOrders) / Number(data?.totalOrders)) *
+                100
+              ).toFixed(2) + "%"
             : "N/A"}
         </span>
         <p className="from-to text-muted text-center">
@@ -65,8 +67,9 @@ const RatingStats = () => {
           </Tooltip>
         </div>
         <span className="mb-2">
-          {data?.avgRating}
-        </span>
+          <StarIcon color="warning" />
+          {data?.avgRating.toFixed(2)}
+          </span>
         <p className="from-to text-muted text-center">
           Total orders: {data?.totalOrders}
           <br />

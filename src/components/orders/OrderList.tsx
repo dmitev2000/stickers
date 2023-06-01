@@ -24,6 +24,7 @@ const OrderList = ({ orders }: { orders: OrderType[] }) => {
           <th className="text-center">Total products</th>
           <th className="text-center">Different products</th>
           <th className="text-center">Status</th>
+          <th className="text-center">Rated</th>
           <th className="text-center">Details</th>
         </tr>
       </thead>

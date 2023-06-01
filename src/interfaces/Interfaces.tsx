@@ -42,6 +42,7 @@ export interface OrderType {
   updatedAt: Date;
   createdAt: Date;
   status: string;
+  rating: null | undefined | number;
   shippingDetails: ShippingDetails;
   confirmationDate: string | null;
   estimatedDelivery: string;

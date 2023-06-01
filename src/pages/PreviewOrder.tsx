@@ -70,7 +70,7 @@ const PreviewOrder = () => {
 
   return (
     <div className="container my-5">
-      <h1 className="mb-5">Preview Order</h1>
+      <h1 className="mb-5 dashboard-h">Preview Order</h1>
       {order && (
         <>
           <div className="order-preview">

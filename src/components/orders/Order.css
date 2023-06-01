@@ -239,12 +239,17 @@
   color: limegreen;
 }
 
-.delivered {
+.delivered, .not-rated {
   color: cadetblue;
 }
 
 .placed {
   color: #ff1867;
+}
+
+.table-rating {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
 }
 
 @media screen and (max-width: 1200px) {

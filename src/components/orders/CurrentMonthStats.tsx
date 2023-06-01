@@ -66,7 +66,7 @@ const CurrentMonthStats = () => {
             <MonetizationOnIcon fontSize="large" style={{ color: "#ff1867"}} />
           </Tooltip>
         </div>
-        <span>${data?.totalProfit}</span>
+        <span>${data?.totalProfit.toFixed(2)}</span>
         <p className="from-to text-muted">
           {currentMonth.toString().substring(4, 15)} - {new Date().toDateString().substring(4, 15)}
         </p>
