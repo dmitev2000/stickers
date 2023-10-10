@@ -1,96 +1,91 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, ReactNode } from "react";
 
-type AuthContextType = {
-  user: any;
-  token: any,
+interface User {
+  _id: string;
+  username: string;
+  role: string;
+}
+
+interface LoginSuccessPayload {
+  user: User;
+  token: string;
+}
+
+interface AuthState {
+  user: User | null;
   loading: boolean;
-  error: string;
-  dispatch: (value: any) => void;
-};
+  error: string | null;
+  token: string | null;
+}
 
-const getStoredUser = () => {
-  const storedData = localStorage.getItem("user");
-  if (storedData) {
-    try {
-      const parsedData = JSON.parse(storedData);
-      return parsedData;
-    } catch (error) {
-      console.error("Error parsing stored data:", error);
-    }
-  }
-  return "";
-};
+export type AuthAction =
+  | { type: "LOGIN_START" }
+  | { type: "LOGIN_SUCCESS"; payload: LoginSuccessPayload }
+  | { type: "LOGIN_FAILURE"; payload: string }
+  | { type: "LOGOUT" };
 
-const INITIAL_STATE: AuthContextType = {
-  user: getStoredUser(),
+const INITIAL_STATE: AuthState = {
+  user: JSON.parse(localStorage.getItem("user") || "null"),
+  token: JSON.parse(localStorage.getItem("token") || "null"),
   loading: false,
-  token: "",
-  error: "",
-  dispatch: (value: any) => {},
+  error: null,
 };
 
-export const AuthenticationContext = createContext(INITIAL_STATE);
+export const AuthContext = createContext<{
+  state: AuthState;
+  dispatch: React.Dispatch<AuthAction>;
+}>({ state: INITIAL_STATE, dispatch: () => {} });
 
-const AuthReducer = (state: AuthContextType, action: any) => {
+const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN_START":
       return {
-        user: "",
-        token: "",
+        user: null,
         loading: true,
-        error: "",
-        dispatch: state.dispatch,
+        error: null,
+        token: null,
       };
     case "LOGIN_SUCCESS":
       return {
         user: action.payload.user,
-        token: action.payload.auth.token,
+        token: action.payload.token,
         loading: false,
-        error: "",
-        dispatch: state.dispatch,
+        error: null,
       };
     case "LOGIN_FAILURE":
       return {
-        user: "",
-        token: "",
+        user: null,
+        token: null,
         loading: false,
         error: action.payload,
-        dispatch: state.dispatch,
       };
     case "LOGOUT":
       return {
-        user: "",
-        token: "",
+        user: null,
+        token: null,
         loading: false,
-        error: "",
-        dispatch: state.dispatch,
+        error: null,
       };
     default:
       return state;
   }
 };
 
-export const AuthenticationContextProvider = ({
-  children,
-}: {
-  children: any;
-}) => {
+interface AuthContextProviderProps {
+  children: ReactNode;
+}
+
+export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
+
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(state.user));
+    localStorage.setItem("token", JSON.stringify(state.token));
   }, [state.user]);
 
   return (
-    <AuthenticationContext.Provider
-      value={{
-        user: state.user,
-        token: state.token,
-        loading: state.loading,
-        error: state.error,
-        dispatch,
-      }}
-    >
+    <AuthContext.Provider value={{ state, dispatch }}>
       {children}
-    </AuthenticationContext.Provider>
+    </AuthContext.Provider>
   );
 };

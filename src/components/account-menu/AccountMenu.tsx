@@ -10,13 +10,13 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FireNotification } from "../../utils/FireNotificiation";
 import CartContext from "../../context/CartContext";
 
 const AccountMenu = () => {
-  const AuthCtx = React.useContext(AuthenticationContext);
+  const AuthCtx = React.useContext(AuthContext);
   const CartCtx = React.useContext(CartContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -57,7 +57,7 @@ const AccountMenu = () => {
               color: "#27282c",
             }}
           >
-            {AuthCtx.user.username[0].toUpperCase()}
+            {AuthCtx.state.user?.username[0].toUpperCase()}
           </Avatar>
         </IconButton>
       </Tooltip>
@@ -97,7 +97,7 @@ const AccountMenu = () => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> {AuthCtx.user.username}
+          <Avatar /> {AuthCtx.state.user?.username}
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
@@ -110,7 +110,10 @@ const AccountMenu = () => {
           <ListItemIcon>
             <ListAltIcon fontSize="small" />
           </ListItemIcon>
-          <Link to={`/my-orders/${AuthCtx.user._id}`} className="account-menu-link">
+          <Link
+            to={`/my-orders/${AuthCtx.state.user?._id}`}
+            className="account-menu-link"
+          >
             My orders
           </Link>
         </MenuItem>

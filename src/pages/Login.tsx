@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
-import { AuthenticationContext } from "../context/AuthenticationContext";
+import { AuthContext } from "../context/AuthenticationContext";
 import CartContext from "../context/CartContext";
 import axios from "axios";
 import { FireNotification } from "../utils/FireNotificiation";
 
 const Login = () => {
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const CartCtx = useContext(CartContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +15,7 @@ const Login = () => {
 
   const LoginHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    AuthCtx.dispatch("LOGIN_START");
+    AuthCtx.dispatch({ type: "LOGIN_START" });
     axios
       .post(`${BASE_URL}/auth/login`, {
         username: username,
@@ -26,7 +26,6 @@ const Login = () => {
         axios
           .get(`${BASE_URL}/cart/${res.data.user._id}`)
           .then((res) => {
-            //console.log(res.data);
             for (var i = 0; i < res.data.length; i++) {
               CartCtx.addSticker({
                 sticker: res.data[i].sticker,
@@ -67,9 +66,9 @@ const Login = () => {
               setPassword(() => event.target.value);
             }}
           />
-          {AuthCtx.error && (
+          {AuthCtx.state.error && (
             <span className="text-danger text-center w-100">
-              {AuthCtx.error}
+              {AuthCtx.state.error}
             </span>
           )}
           <input type="submit" value="Login" className="w-100" />

@@ -7,7 +7,7 @@ import {
   Radar,
   Legend,
 } from "recharts";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../loader/Loader";
@@ -18,10 +18,10 @@ const OrderStatisticsTagsChart = () => {
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(0);
   const navigate = useNavigate();
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
 
   useEffect(() => {
-    if (!AuthCtx.user || AuthCtx.user.role !== "Admin") {
+    if (!AuthCtx.state.user || AuthCtx.state.user.role !== "Admin") {
       navigate("/");
     }
     axios

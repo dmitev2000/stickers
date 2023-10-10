@@ -1,35 +1,43 @@
+import { noToken, invalidToken } from "../utils/ErrorMessages.js";
 import { CreateError } from "./Error.js";
 import jwt from "jsonwebtoken";
 
 export const VerifyToken = (req, res, next) => {
-  let token;
   try {
     const authHeader = req.headers["authorization"];
-    if (authHeader) {
+    if (authHeader !== undefined) {
+      const token = authHeader.split(" ")[1];
+      if (!token) {
+        return next(CreateError(401, noToken));
+      }
       try {
-        token = authHeader.split(" ")[1];
-        //console.log(token);
-        if (!token) {
-          return next(
-            CreateError(
-              401,
-              "You are not authenticated. No authentication token."
-            )
-          );
-        }
         const payload = jwt.verify(token, process.env.JWT);
-        //console.log(payload);
+        const { username } = payload;
+        req.params.by = username;
         return next();
-      } catch {
-        return next(CreateError(403, "You are not authenticated. Authentication Token is not valid."));
+      } catch (error) {
+        return next(CreateError(403, invalidToken));
       }
     } else {
-      return next(
-        CreateError(401, "You are not authenticated. No authentication token.")
-      );
+      return next(CreateError(401, noToken));
     }
-    next();
-  } catch (err) {
-    return next(CreateError(401, "You are not authenticated."));
+  } catch (error) {
+    next(CreateError(401, "Authentication failure."));
+  }
+};
+
+export const VerifyUser = (req, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader.split(" ")[1];
+    const payload = jwt.verify(token, process.env.JWT);
+    const { user_id } = payload;
+    if (user_id !== +req.params.user_id) {
+      return next(CreateError(403, "You are not authorized."));
+    } else {
+      return next();
+    }
+  } catch (error) {
+    next(CreateError(500, "Internal server error."));
   }
 };

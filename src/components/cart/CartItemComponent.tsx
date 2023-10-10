@@ -1,15 +1,16 @@
 import { CartItem } from "../../interfaces/Interfaces";
 import { useContext } from "react";
 import CartContext from "../../context/CartContext";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 import { FireErrorNotification } from "../../utils/FireNotificiation";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 const CartItemComponent = ({ item }: { item: CartItem }) => {
   const CartCtx = useContext(CartContext);
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const BASE_URL = "http://localhost:5000/api/cart";
+  const IMG_URL = "http://localhost:5000/uploads";
 
   const RemoveItemHandler = () => {
     Swal.fire({
@@ -17,12 +18,12 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
       showCancelButton: true,
       confirmButtonText: "Confirm",
       confirmButtonColor: "#ff1867",
-      cancelButtonColor: "#27282c"
+      cancelButtonColor: "#27282c",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
           .post(`${BASE_URL}/remove-item-from-cart`, {
-            userID: AuthCtx.user._id,
+            userID: AuthCtx.state.user?._id,
             stickerID: item.sticker._id,
           })
           .then((res) => {
@@ -39,7 +40,7 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
   const IncrementQuantityHandler = () => {
     axios
       .post(`${BASE_URL}/increment-quantity`, {
-        userID: AuthCtx.user._id,
+        userID: AuthCtx.state.user?._id,
         stickerID: item.sticker._id,
       })
       .then((res) => {
@@ -51,7 +52,7 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
   const DecrementQuantityHandler = () => {
     axios
       .post(`${BASE_URL}/decrement-quantity`, {
-        userID: AuthCtx.user._id,
+        userID: AuthCtx.state.user?._id,
         stickerID: item.sticker._id,
       })
       .then((res) => {
@@ -64,7 +65,10 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
     <tr>
       <td>
         <div className="d-flex justify-content-start gap-3 align-items-center">
-          <img src={item.sticker.image} alt={item.sticker.title} />
+          <img
+            src={`${IMG_URL}/${item.sticker.image}`}
+            alt={item.sticker.title}
+          />
           <div className="td-div flex-column justify-content-center">
             <p className="fw-bold">{item.sticker.title}</p>
             <p className="text-muted">{item.sticker.tags.toString()}</p>

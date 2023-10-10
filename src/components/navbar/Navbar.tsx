@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 import AccountMenu from "../account-menu/AccountMenu";
 import CartIndicator from "../cart/CartIndicator";
 import LoginIcon from "@mui/icons-material/Login";
@@ -9,7 +9,7 @@ import "./Navbar.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const Navbar = () => {
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
 
   return (
     <nav>
@@ -18,7 +18,7 @@ const Navbar = () => {
         Stickers
       </Link>
       <div className="d-flex gap-3">
-        {!AuthCtx.user ? (
+        {!AuthCtx.state.user ? (
           <Link to="/login">
             <Tooltip title="Login">
               <LoginIcon color="error" fontSize="large" />
@@ -26,7 +26,7 @@ const Navbar = () => {
           </Link>
         ) : (
           <>
-            {AuthCtx.user.role === "Admin" && (
+            {AuthCtx.state.user?.role === "Admin" && (
               <div
                 className="d-flex align-items-center mx-4"
                 style={{ cursor: "pointer", color: "#ff1867" }}

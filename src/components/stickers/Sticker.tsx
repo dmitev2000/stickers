@@ -6,15 +6,16 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Tooltip from "@mui/material/Tooltip";
 import CartContext from "../../context/CartContext";
 import { FireNotification } from "../../utils/FireNotificiation";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 import axios from "axios";
 
 const Sticker = ({ sticker }: { sticker: any }) => {
   const INITIAL_VALUE = 1;
   const [value, setValue] = useState(INITIAL_VALUE);
   const CartCtx = useContext(CartContext);
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const BASE_URL = "http://localhost:5000/api/cart";
+  const IMG_URL = "http://localhost:5000/uploads";
 
   const TagsToString = (array: []) => {
     let result = "";
@@ -30,7 +31,7 @@ const Sticker = ({ sticker }: { sticker: any }) => {
   const AddToCart = () => {
     axios
       .post(`${BASE_URL}/update-cart`, {
-        userID: AuthCtx.user._id,
+        userID: AuthCtx.state.user?._id,
         sticker: sticker,
         quantity: value,
       })
@@ -57,7 +58,7 @@ const Sticker = ({ sticker }: { sticker: any }) => {
           <i className="bi bi-person-circle" title={sticker.by}></i>
         )}
       </span>
-      <img src={sticker.image} />
+      <img src={`${IMG_URL}/${sticker.image}`} />
       <div className="info">
         <h3>{sticker.title}</h3>
         <div className="d-flex justify-content-center align-items-center flex-wrap flex-column gap-2">
@@ -74,7 +75,7 @@ const Sticker = ({ sticker }: { sticker: any }) => {
           <span className="fw-bold price">
             ${sticker.price.toFixed(2).toString()}
           </span>
-          {AuthCtx.user && (
+          {AuthCtx.state.user && (
             <>
               <NumericStepper
                 minimumValue={1}

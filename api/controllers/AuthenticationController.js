@@ -61,12 +61,13 @@ export const Login = async (req, res, next) => {
       return next(CreateError(400, "Wrong password."));
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT
+    );
 
-    const { password, ...otherProps } = user._doc;
-    res.status(200).json({ user: { ...otherProps }, auth: { token } });
+    const { password, createdAt, updatedAt, __v, ...otherProps } = user._doc;
+    res.status(200).json({ user: { ...otherProps }, token: token });
   } catch (err) {
     next(err);
   }

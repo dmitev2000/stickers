@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import CartContext from "../context/CartContext";
-import { AuthenticationContext } from "../context/AuthenticationContext";
+import { AuthContext } from "../context/AuthenticationContext";
 import CartList from "../components/cart/CartList";
 import shoppingcart from "../assets/shopping-cart.svg";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
@@ -12,7 +12,7 @@ import axios from "axios";
 import { FireErrorNotification } from "../utils/FireNotificiation";
 
 const Cart = () => {
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const CartCtx = useContext(CartContext);
   const BASE_URL = "http://localhost:5000/api/cart";
 
@@ -26,7 +26,7 @@ const Cart = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`${BASE_URL}/empty-cart`, { userID: AuthCtx.user._id })
+          .post(`${BASE_URL}/empty-cart`, { userID: AuthCtx.state.user?._id })
           .then((res) => {
             CartCtx.emptyCart();
             FireErrorNotification("Your cart is now empty.");

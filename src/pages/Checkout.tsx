@@ -1,6 +1,6 @@
 import { useState, useContext, FormEvent } from "react";
 import CartContext from "../context/CartContext";
-import { AuthenticationContext } from "../context/AuthenticationContext";
+import { AuthContext } from "../context/AuthenticationContext";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { macedonian_cities } from "../utils/static_data";
@@ -10,7 +10,7 @@ import { FireNotification } from "../utils/FireNotificiation";
 import StickerTable from "../components/stickers/StickerTable";
 
 const Checkout = () => {
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const CartCtx = useContext(CartContext);
   const navigate = useNavigate();
   const [fullname, setFullname] = useState("");
@@ -28,16 +28,16 @@ const Checkout = () => {
 
     axios
       .post("http://localhost:5000/api/orders", {
-        userID: AuthCtx.user._id,
+        userID: AuthCtx.state.user?._id,
         stickerList: dataToSend,
         totalPrice: CartCtx.totalPrice.toFixed(2),
         shippingDetails: {
           fullname: fullname,
           city: city,
           address: address,
-          phone_number: phone_number
+          phone_number: phone_number,
         },
-        estimatedDelivery: new Date().setDate(new Date().getDate() + 4)
+        estimatedDelivery: new Date().setDate(new Date().getDate() + 4),
       })
       .then((res) => {
         FireNotification(res.data);
@@ -89,7 +89,10 @@ const Checkout = () => {
           </form>
         </div>
         <div className="py-5 d-flex align-items-center">
-          <StickerTable stickers={CartCtx.stickerList} totalPrice={CartCtx.totalPrice} />
+          <StickerTable
+            stickers={CartCtx.stickerList}
+            totalPrice={CartCtx.totalPrice}
+          />
         </div>
       </div>
     </div>

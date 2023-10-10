@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import bodyParser from "body-parser";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 import StickerRoutes from "./routes/StickerRoutes.js";
 import UserRoutes from "./routes/UserRoutes.js";
@@ -15,14 +18,21 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const corsOptions = {
-  origin: "http://127.0.0.1:5173",
+  origin: "http://localhost:5173",
   credentials: true,
   optionSuccessStatus: 200,
 };
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/stickers", StickerRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/auth", AuthenticationRoutes);

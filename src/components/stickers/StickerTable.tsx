@@ -7,6 +7,8 @@ const StickerTable = ({
   stickers: StickerDetails[] | null;
   totalPrice: number;
 }) => {
+  const IMG_URL = "http://localhost:5000/uploads";
+
   return (
     <table className="table table-hover" style={{ minWidth: "400px" }}>
       <thead style={{ backgroundColor: "#27282c", color: "white" }}>
@@ -25,7 +27,7 @@ const StickerTable = ({
                 <td>
                   <img
                     style={{ width: "80px", height: "80px" }}
-                    src={sticker.sticker.image}
+                    src={`${IMG_URL}/${sticker.sticker.image}`}
                     alt={sticker.sticker.title}
                   />
                 </td>
@@ -50,7 +52,7 @@ const StickerTable = ({
                     style={{ height: "80px" }}
                     className="d-flex justify-content-center align-items-center"
                   >
-                    ${(sticker.sticker.price).toFixed(2)}
+                    ${sticker.sticker.price.toFixed(2)}
                   </div>
                 </td>
               </tr>

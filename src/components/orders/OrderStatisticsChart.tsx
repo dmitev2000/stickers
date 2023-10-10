@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import Loader from "../loader/Loader";
 import { useNavigate } from "react-router-dom";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 
 const OrderStatisticsChart = () => {
   const [statisticsData, setStatisticsData] = useState<
@@ -20,10 +20,10 @@ const OrderStatisticsChart = () => {
   >([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
 
   useEffect(() => {
-    if (!AuthCtx.user || AuthCtx.user.role !== "Admin") {
+    if (!AuthCtx.state.user || AuthCtx.state.user?.role !== "Admin") {
       navigate("/");
     }
     axios

@@ -55,7 +55,10 @@ const PendingSticker = ({ item }: { item: any }) => {
   return (
     <tr className="pending-row">
       <td>
-        <img style={{ width: "100px", height: "100px" }} src={item.image} />
+        <img
+          style={{ width: "100px", height: "100px" }}
+          src={`http://localhost:5000/uploads/${item.image}`}
+        />
       </td>
       <td>
         <div

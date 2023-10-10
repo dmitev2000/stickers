@@ -6,40 +6,44 @@ import {
   FireNotification,
 } from "../utils/FireNotificiation";
 import axios from "axios";
-import { AuthenticationContext } from "../context/AuthenticationContext";
+import { AuthContext } from "../context/AuthenticationContext";
 import CreateStickerInfo from "../components/stickers/CreateStickerInfo";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 
 const CreateSticker = () => {
   const BASE_URL = "http://localhost:5000/api/stickers";
-  const [title, setTitle] = useState("Title");
-  const [image, setImage] = useState("");
-  const [validImageUrl, setValidImageUrl] = useState(false);
-  const [price, setPrice] = useState(0);
-  const [tags, setTags] = useState(["Tags"]);
-  const [company, setCompany] = useState("Company / creator");
-  const priceInputRef = useRef<HTMLInputElement>(null);
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const tagsVal = [
+    "OS",
+    "Tooling",
+    "Framework",
+    "Service",
+    "Protocol",
+    "Language",
+    "Other",
+  ];
+
+  const [title, setTitle] = useState("Title");
+  const [img, setImg] = useState<string | undefined>(undefined);
+  const [tag, setTag] = useState<string[]>([]);
+  const [company, setCompany] = useState("Company/creator");
 
   const SubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validImageUrl) {
-      console.log("Invalid image url");
-      return;
-    }
-    const newSticker = {
-      title: title,
-      image: image,
-      tags: tags,
-      price: price,
-      company: company,
-      by: AuthCtx.user.username,
-    };
+
+    const formData = new FormData(event.currentTarget);
+
     axios
-      .post(`${BASE_URL}/add`, newSticker, {
-        withCredentials: true,
+      .post(`${BASE_URL}/add`, formData, {
         headers: {
-          Authorization: `Bearer ${AuthCtx.token}`,
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
@@ -52,142 +56,113 @@ const CreateSticker = () => {
             `This sticker is already created. Create another one or change its title or image.`
           );
         } else {
-          FireErrorNotification(
-            `${err.response.data}. To create stickers you must be logged in.`
-          );
+          FireErrorNotification(`${err.response.data}`);
         }
       });
   };
 
-  const StickerImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const url = event.target.value;
-    setImage(() => url);
-
-    const imageObject = new Image();
-    imageObject.onload = () => {
-      setValidImageUrl(() => true);
-      if (imageObject.src.split(".").pop() === "svg") {
-        setPrice(() => 0.9);
-        if (priceInputRef.current) {
-          priceInputRef.current.value = "0.9";
-        }
-        return;
-      }
-      axios
-        .post(`${BASE_URL}/calculate-price`, { url: url })
-        .then((res) => {
-          setPrice(() => +res.data);
-          if (priceInputRef.current) {
-            priceInputRef.current.value = res.data.toString();
-          }
-        })
-        .catch((err) => console.log(err));
-    };
-    imageObject.onerror = () => {
-      setValidImageUrl(() => false);
-      setPrice(() => 0.0);
-      if (priceInputRef.current) {
-        priceInputRef.current.value = "";
-      }
-    };
-    imageObject.src = url;
+  const HandleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImg(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImg(undefined);
+    }
   };
 
-  const TagsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const options = event.target.options;
-    const selectedValues: string[] = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selectedValues.push(options[i].value);
-      }
-    }
-    setTags(selectedValues);
+  const TagChange = (event: SelectChangeEvent<typeof tag>) => {
+    const {
+      target: { value },
+    } = event;
+    setTag(typeof value === "string" ? value.split(",") : value);
   };
 
   return (
     <div className="container py-5">
       <BrowseOptions />
       <div className="create-sticker mt-5 py-3">
-        <form className="create-sticker-form" onSubmit={SubmitHandler}>
-          <input
-            type="text"
+        <form
+          className="create-sticker-form"
+          id="create-sticker-form"
+          onSubmit={SubmitHandler}
+          encType="multipart/form-data"
+        >
+          <TextField
+            label="Title"
+            variant="outlined"
             id="title"
-            placeholder="Title"
-            autoComplete="off"
+            name="title"
             onChange={(e) => {
               setTitle(() => e.target.value);
             }}
-            required
-          />
-          <input
-            type="url"
-            id="image"
-            placeholder="Sticker image"
             autoComplete="off"
-            onChange={StickerImageChange}
+            fullWidth
             required
           />
-          {!image ? (
-            <span className="invalid-url">Sticker image required</span>
-          ) : validImageUrl ? (
-            <span className="valid-url">Valid url</span>
-          ) : (
-            <span className="invalid-url">
-              Invalid url or unsupported format
-            </span>
-          )}
           <input
-            type="text"
+            type="file"
+            accept="image/*"
+            name="image"
+            required
+            onChange={HandleImageChange}
+          />
+          <TextField
+            name="company"
             id="company"
-            placeholder="Company (creators)"
+            label="Company"
             autoComplete="off"
+            fullWidth
             onChange={(e) => {
               setCompany(() => e.target.value);
             }}
             required
           />
-          <select required multiple={true} onChange={TagsChange}>
-            <option disabled>Sticker type</option>
-            <option value="Language">Language</option>
-            <option value="Tooling">Tooling</option>
-            <option value="Protocol">Protocol</option>
-            <option value="Framework">Framework</option>
-            <option value="Service">Service</option>
-            <option value="Meme">Meme</option>
-            <option value="OS">OS</option>
-            <option value="Other">Other</option>
-          </select>
-          <input
-            type="number"
-            min={0.1}
-            step={0.05}
-            id="price"
-            placeholder="Price"
-            autoComplete="off"
-            readOnly={true}
-            ref={priceInputRef}
-            required
-          />
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Tags</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              multiple
+              label="Tag"
+              value={tag}
+              onChange={TagChange}
+              name="tag"
+            >
+              {tagsVal.map((t, i) => {
+                return (
+                  <MenuItem value={t} key={i}>
+                    {t}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
           <input type="submit" value="Save sticker" />
         </form>
         <div className="sticker-preview">
           <div className="demo-sticker">
-            <img src={image} id="preview-img" alt="" />
+            <img src={img} id="preview-img" alt="" />
             <div className="demo-sticker-info" style={{ maxWidth: "250px" }}>
-              <div
-                className="d-flex justify-content-center align-items-center flex-column gap-2 flex-wrap"
-              >
-                <h3 className="m-0 w-100" style={{fontSize: "2em"}}>{title}</h3>
+              <div className="d-flex justify-content-center align-items-center flex-column gap-2 flex-wrap">
+                <h3 className="m-0 w-100" style={{ fontSize: "2em" }}>
+                  {title}
+                </h3>
                 <span className="text-center">
                   <i className="bi bi-camera"></i>
                   {company}
                 </span>
                 <span>
                   <i className="bi bi-bookmark"></i>
-                  {tags.toString()}
+                  {tag.length === 0 ? "Tag" : tag.toString()}
                 </span>
               </div>
-              <span className="demo-sticker-price">${price.toFixed(2)}</span>
+              <span className="demo-sticker-price">
+                Price will be calculated afterwards
+              </span>
             </div>
           </div>
         </div>

@@ -65,13 +65,27 @@ export const GetPendingStickers = async (req, res, next) => {
 
 export const AddSticker = async (req, res, next) => {
   try {
+    const imageFileName = req.file.originalname;
+
+    const image = await Jimp.read(`./uploads/${imageFileName}`);
+
+    const result = [];
+    image.resize(50, 50);
+    for (let i = 0; i < image.getWidth(); i++) {
+      for (let j = 0; j < image.getHeight(); j++) {
+        if (!result.includes(image.getPixelColor(i, j))) {
+          result.push(image.getPixelColor(i, j));
+        }
+      }
+    }
+
     const newSticker = new Sticker({
       title: req.body.title,
-      image: req.body.image,
-      price: req.body.price,
+      image: imageFileName,
+      price: (result.length * 0.001).toFixed(2),
       company: req.body.company,
-      tags: req.body.tags,
-      by: req.body.by ? req.body.by : "Community",
+      tags: req.body.tag,
+      by: req.params.by ? req.params.by : "Community",
     });
 
     await newSticker.save();
@@ -102,28 +116,11 @@ export const UpdateStickerStatus = async (req, res, next) => {
         sticker: otherProps,
         reason: req.body.reason,
       });
+      await Sticker.deleteOne({ _id: req.body.sticker._id });
     }
 
     res.status(200).json(`Sticker (${req.body.sticker.title}) status updated.`);
   } catch (error) {
     next(error);
-  }
-};
-
-export const CalculatePriceForSticker = async (req, res, next) => {
-  try {
-    Jimp.read(req.body.url).then((image) => {
-      const result = [];
-      image.resize(50, 50);
-      for (var i = 0; i < image.getWidth(); i++) {
-        for (var j = 0; j < image.getHeight(); j++) {
-          if (!result.includes(image.getPixelColor(i, j)))
-            result.push(image.getPixelColor(i, j));
-        }
-      }
-      res.status(200).json((result.length * 0.001).toFixed(2));
-    });
-  } catch (error) {
-    next(CreateError(400, "SVG format is not supported."));
   }
 };

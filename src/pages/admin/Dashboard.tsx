@@ -1,19 +1,19 @@
 import { useContext, useEffect } from "react";
-import { AuthenticationContext } from "../../context/AuthenticationContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 import { Link, useNavigate } from "react-router-dom";
 import StickerRequests from "./StickerRequests";
 import { ReloadDashboardContextProvider } from "../../context/ReloadDashboardContext";
 import RejectedStickers from "./RejectedStickers";
 import PlacedOrders from "./PlacedOrders";
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import UsersInfo from "./UsersInfo";
 
 const Dashboard = () => {
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!AuthCtx.user || AuthCtx.user.role !== "Admin") {
+    if (!AuthCtx.state.user || AuthCtx.state.user.role !== "Admin") {
       navigate("/");
     }
   }, []);
@@ -27,7 +27,9 @@ const Dashboard = () => {
         <RejectedStickers />
         <h3 className="mt-5 dashboard-h">Orders</h3>
         <PlacedOrders />
-        <Link className="link" to="/admin/order-statistics"><QueryStatsIcon fontSize="small" /> Order statistics</Link>
+        <Link className="link" to="/admin/order-statistics">
+          <QueryStatsIcon fontSize="small" /> Order statistics
+        </Link>
         <h3 className="mt-5 mb-4 dashboard-h">Users</h3>
         <UsersInfo />
       </div>

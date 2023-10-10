@@ -1,19 +1,21 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Loader from "../components/loader/Loader";
-import { AuthenticationContext } from "../context/AuthenticationContext";
+import { AuthContext } from "../context/AuthenticationContext";
 import orders_svg from "../assets/orders.svg";
 import { Link } from "react-router-dom";
 import OrderList from "../components/orders/OrderList";
 
 const MyOrders = () => {
-  const AuthCtx = useContext(AuthenticationContext);
+  const AuthCtx = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/orders/my-orders/${AuthCtx.user._id}`)
+      .get(
+        `http://localhost:5000/api/orders/my-orders/${AuthCtx.state.user?._id}`
+      )
       .then((res) => {
         setOrders(res.data);
         setLoading(false);
