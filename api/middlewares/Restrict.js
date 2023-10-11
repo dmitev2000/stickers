@@ -1,5 +1,5 @@
 import { noToken, invalidToken } from "../utils/ErrorMessages.js";
-import { CreateError } from "./Error.js";
+import { CreateError } from "../utils/Error.js";
 import jwt from "jsonwebtoken";
 
 export const VerifyToken = (req, res, next) => {
@@ -34,6 +34,24 @@ export const VerifyUser = (req, res, next) => {
     const { user_id } = payload;
     if (user_id !== +req.params.user_id) {
       return next(CreateError(403, "You are not authorized."));
+    } else {
+      return next();
+    }
+  } catch (error) {
+    next(CreateError(500, "Internal server error."));
+  }
+};
+
+export const VerifyAdmin = (req, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader.split(" ")[1];
+    const payload = jwt.verify(token, process.env.JWT);
+    const { role } = payload;
+    if (role !== "Admin") {
+      return next(
+        CreateError(403, "Forbidden resource (invalid permissions).")
+      );
     } else {
       return next();
     }

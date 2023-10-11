@@ -11,6 +11,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import MyOrders from "./pages/MyOrders";
 import PreviewOrder from "./pages/PreviewOrder";
 import OrderStatistics from "./pages/admin/OrderStatistics";
+import Forbidden from "./pages/Forbidden";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="/admin/order-statistics" element={<OrderStatistics />} />
+      <Route path="/forbidden" element={<Forbidden />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

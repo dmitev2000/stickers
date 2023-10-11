@@ -13,31 +13,32 @@ import {
   SetRating,
   StatisticsByCategory,
 } from "../controllers/OrderController.js";
+import { VerifyAdmin, VerifyToken, VerifyUser } from "../middlewares/Restrict.js";
 
 const router = express.Router();
 
-router.get("/", GetAllOrders);
+router.get("/", VerifyToken, VerifyAdmin, GetAllOrders);
 
-router.post("/", PlaceOrder);
+router.post("/", VerifyToken, PlaceOrder);
 
-router.get("/:id", GetOrder);
+router.get("/:id", VerifyToken, VerifyUser, GetOrder);
 
-router.get("/my-orders/:user_id", GetOrdersByUser);
+router.get("/my-orders/:user_id", VerifyToken, VerifyUser, GetOrdersByUser);
 
-router.get("/get/placed", GetPlacedOrders);
+router.get("/get/placed", VerifyToken, VerifyAdmin, GetPlacedOrders);
 
-router.get("/get/statistics", GetOrderStatistics);
+router.get("/get/statistics", VerifyToken, VerifyAdmin, GetOrderStatistics);
 
-router.get("/get/all-time-statistics", GetAllTimeStatistics);
+router.get("/get/all-time-statistics", VerifyToken, VerifyAdmin, GetAllTimeStatistics);
 
-router.get("/get/category-statistics", StatisticsByCategory);
+router.get("/get/category-statistics", VerifyToken, VerifyAdmin, StatisticsByCategory);
 
-router.get("/get/current-month-statistics", CurrentMonthStatistics);
+router.get("/get/current-month-statistics", VerifyToken, VerifyAdmin, CurrentMonthStatistics);
 
-router.get("/get/rating-stats", RatingStats);
+router.get("/get/rating-stats", VerifyToken, VerifyAdmin, RatingStats);
 
-router.post("/confirm", ConfirmOrder);
+router.post("/confirm", VerifyToken, VerifyAdmin, ConfirmOrder);
 
-router.post("/set-rating", SetRating);
+router.post("/set-rating", VerifyToken, VerifyUser, SetRating);
 
 export default router;

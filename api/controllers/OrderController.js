@@ -2,7 +2,14 @@ import Order from "../models/OrderModel.js";
 import Sticker from "../models/StickerModel.js";
 import { CreateError } from "../utils/Error.js";
 
-export const GetAllOrders = async (req, res, next) => {};
+export const GetAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find({});
+    res.status(200).json(orders);
+  } catch (error) {
+    next(CreateError(500, "Internal server error."));
+  }
+};
 
 export const PlaceOrder = async (req, res, next) => {
   try {
@@ -377,7 +384,7 @@ export const CurrentMonthStatistics = async (req, res, next) => {
 
 export const RatingStats = async (req, res, next) => {
   try {
-    const totalOrders = (await Order.find({ status: "Confirmed"})).length;
+    const totalOrders = (await Order.find({ status: "Confirmed" })).length;
 
     const rated_orders = await Order.find({
       rating: { $ne: null, $exists: true },

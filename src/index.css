@@ -219,11 +219,30 @@ html {
   align-items: center;
   flex-direction: column;
   gap: 15px;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 80px);
 }
 
 .not-found h3 {
   color: #ff1867;
+}
+
+.not-found img {
+  max-height: 300px;
+}
+
+.not-found .h-link {
+  background-color: #ff1867;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+  min-width: 150px;
+  text-align: center;
+}
+
+.not-found .h-link:hover {
+  opacity: .8;
 }
 
 .auth-wrapper {
@@ -452,6 +471,22 @@ tfoot {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   letter-spacing: 1.5px;
   text-transform: uppercase;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff1867;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cc1867;
 }
 
 @media screen and (max-width: 780px) {

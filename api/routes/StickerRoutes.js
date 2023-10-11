@@ -9,7 +9,7 @@ import {
   GetStickersFromOrder,
 } from "../controllers/StickerController.js";
 import multer from "multer";
-import { VerifyToken } from "../utils/VerifyToken.js";
+import { VerifyToken } from "../middlewares/Restrict.js";
 
 const router = express.Router();
 const storage = multer.diskStorage({

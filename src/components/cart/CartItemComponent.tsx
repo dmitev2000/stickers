@@ -69,7 +69,7 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
             src={`${IMG_URL}/${item.sticker.image}`}
             alt={item.sticker.title}
           />
-          <div className="td-div flex-column justify-content-center">
+          <div className="td-div flex-column justify-content-center align-items-start">
             <p className="fw-bold">{item.sticker.title}</p>
             <p className="text-muted">{item.sticker.tags.toString()}</p>
           </div>
