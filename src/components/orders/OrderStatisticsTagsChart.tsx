@@ -16,6 +16,7 @@ import { CategoryChartData } from "../../interfaces/Interfaces";
 const OrderStatisticsTagsChart = () => {
   const [data, setData] = useState<CategoryChartData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<any>(null);
   const [limit, setLimit] = useState(0);
   const navigate = useNavigate();
   const AuthCtx = useContext(AuthContext);
@@ -24,14 +25,22 @@ const OrderStatisticsTagsChart = () => {
     if (!AuthCtx.state.user || AuthCtx.state.user.role !== "Admin") {
       navigate("/");
     }
+    setError(null);
+    setLoading(true);
     axios
-      .get("http://localhost:5000/api/orders/get/category-statistics")
+      .get("http://localhost:5000/api/orders/get/category-statistics", {
+        headers: {
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+        },
+      })
       .then((res) => {
         setData(res.data);
         setLimit(res.data[0].value + 5);
-        setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err))
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
@@ -41,6 +50,17 @@ const OrderStatisticsTagsChart = () => {
         style={{ minHeight: "300px" }}
       >
         <Loader />
+      </div>
+    );
+  }
+
+  if (error !== null) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "300px" }}
+      >
+        {error.response.data}
       </div>
     );
   }

@@ -21,12 +21,12 @@ const BrowseOptions = () => {
         Create Your Sticker
       </NavLink>
       <NavLink
-        to="/favorites"
+        to="/popular"
         className={({ isActive }) =>
           !isActive ? "bo-link" : "bo-link-active"
         }
       >
-        Favorite Stickers
+        Popular Stickers
       </NavLink>
     </div>
   );

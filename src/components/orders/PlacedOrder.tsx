@@ -24,8 +24,12 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import axios from "axios";
 import StickerTable from "../stickers/StickerTable";
-import { FireNotification } from "../../utils/FireNotificiation";
+import {
+  FireErrorNotification,
+  FireNotification,
+} from "../../utils/FireNotificiation";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
+import { AuthContext } from "../../context/AuthenticationContext";
 
 const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
   const [openProducts, setOpenProducts] = useState(false);
@@ -35,6 +39,7 @@ const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
     null
   );
   const ReloadCtx = useContext(ReloadDashboardContext);
+  const AuthCtx = useContext(AuthContext);
 
   const handleClickOpenP = () => {
     setOpenProducts(true);
@@ -72,14 +77,23 @@ const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
 
   const ConfirmOrder = () => {
     axios
-      .post("http://localhost:5000/api/orders/confirm", {
-        order_id: order._id,
-      })
+      .post(
+        "http://localhost:5000/api/orders/confirm",
+        {
+          order_id: order._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         FireNotification(res.data);
         ReloadCtx.UpdateReloadPlacedOrders();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => FireErrorNotification(err.response.data));
   };
 
   return (

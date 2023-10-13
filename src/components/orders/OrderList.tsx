@@ -4,7 +4,7 @@ import DataTable from "datatables.net-dt";
 import { useEffect } from "react";
 import "../../../node_modules/datatables.net-dt/css/jquery.dataTables.css";
 
-const OrderList = ({ orders }: { orders: OrderType[] }) => {
+const OrderList = ({ orders, view }: { orders: OrderType[], view: string }) => {
   useEffect(() => {
     const dtConfig = {
       language: {
@@ -19,18 +19,19 @@ const OrderList = ({ orders }: { orders: OrderType[] }) => {
       <thead className="table-dark">
         <tr>
           <th>Order ID</th>
+          {view === "Admin" && <th>User</th>}
           <th>Date</th>
           <th>Price</th>
-          <th className="text-center">Total products</th>
-          <th className="text-center">Different products</th>
+          {view === "User" && <th className="text-center">Total products</th>}
+          {view === "User" && <th className="text-center">Different products</th>}
           <th className="text-center">Status</th>
           <th className="text-center">Rated</th>
           <th className="text-center">Details</th>
         </tr>
       </thead>
       <tbody>
-        {orders.map((order, index) => {
-          return <Order key={order._id} orderDetails={order} />;
+        {orders.map((order) => {
+          return <Order key={order._id} orderDetails={order} view={view} />;
         })}
       </tbody>
     </table>

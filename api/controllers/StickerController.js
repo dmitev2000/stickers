@@ -47,13 +47,6 @@ export const GetStickersFromOrder = async (req, res, next) => {
   }
 };
 
-export const GetFavoriteStickers = async (req, res, next) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const GetPendingStickers = async (req, res, next) => {
   try {
     const pendingStickers = await Sticker.find({ status: "Pending" });

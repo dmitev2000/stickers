@@ -3,19 +3,25 @@ import { useState, useContext } from "react";
 import { NumericStepper } from "@anatoliygatt/numeric-stepper";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Tooltip from "@mui/material/Tooltip";
-import CartContext from "../../context/CartContext";
-import { FireNotification } from "../../utils/FireNotificiation";
+import {
+  FireErrorNotification,
+  FireNotification,
+} from "../../utils/FireNotificiation";
 import { AuthContext } from "../../context/AuthenticationContext";
+import FavoritesContext from "../../context/FavoritesContext";
+import CartContext from "../../context/CartContext";
 import axios from "axios";
+import { IMG_URL } from "../../utils/API_URLs";
 
 const Sticker = ({ sticker }: { sticker: any }) => {
   const INITIAL_VALUE = 1;
   const [value, setValue] = useState(INITIAL_VALUE);
   const CartCtx = useContext(CartContext);
   const AuthCtx = useContext(AuthContext);
-  const BASE_URL = "http://localhost:5000/api/cart";
-  const IMG_URL = "http://localhost:5000/uploads";
+  const FavsCtx = useContext(FavoritesContext);
+  const BASE_URL = "http://localhost:5000/api";
 
   const TagsToString = (array: []) => {
     let result = "";
@@ -30,13 +36,12 @@ const Sticker = ({ sticker }: { sticker: any }) => {
 
   const AddToCart = () => {
     axios
-      .post(`${BASE_URL}/update-cart`, {
+      .post(`${BASE_URL}/cart/update-cart`, {
         userID: AuthCtx.state.user?._id,
         sticker: sticker,
         quantity: value,
       })
       .then((res) => {
-        //console.log(res.data);
         CartCtx.addSticker({ sticker: sticker, quantity: value });
         FireNotification(
           `${sticker.title} (${value}) sticker added to cart successfully!`
@@ -46,7 +51,30 @@ const Sticker = ({ sticker }: { sticker: any }) => {
   };
 
   const AddToFav = () => {
-    console.log(value);
+    axios
+      .put(
+        `${BASE_URL}/favorites/add/${AuthCtx.state.user?._id}`,
+        {
+          sticker_id: sticker._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        FireNotification(res.data);
+        FavsCtx.addStickerToFavorites(sticker._id);
+      })
+      .catch((error) => {
+        FireErrorNotification(error.respnse.data);
+      });
+  };
+
+  const RemoveFromFavs = () => {
+    FavsCtx.removeStickerFromFavorites(sticker._id);
   };
 
   return (
@@ -97,11 +125,19 @@ const Sticker = ({ sticker }: { sticker: any }) => {
                 }}
               />
               <div className="d-flex justify-content-evenly gap-2">
-                <Tooltip title="Add to favorites">
-                  <button className="add-to-fav" onClick={AddToFav}>
-                    <FavoriteBorderIcon />
-                  </button>
-                </Tooltip>
+                {FavsCtx.stickerList.includes(sticker._id) ? (
+                  <Tooltip title="Remove from favorites">
+                    <button className="add-to-fav" onClick={RemoveFromFavs}>
+                      <FavoriteIcon />
+                    </button>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Add to favorites">
+                    <button className="add-to-fav" onClick={AddToFav}>
+                      <FavoriteBorderIcon />
+                    </button>
+                  </Tooltip>
+                )}
                 <Tooltip title="Add to cart">
                   <button className="add-to-cart" onClick={AddToCart}>
                     <AddShoppingCartIcon />

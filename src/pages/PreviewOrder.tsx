@@ -1,15 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/loader/Loader";
 import Rating from "@mui/material/Rating";
 import { PreviewOrderInterface } from "../interfaces/Interfaces";
-import NoteAltIcon from "@mui/icons-material/NoteAlt";
-import CreditScoreIcon from "@mui/icons-material/CreditScore";
-import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
-import NoCrashIcon from "@mui/icons-material/NoCrash";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import InventoryIcon from "@mui/icons-material/Inventory";
 import Grid3x3Icon from "@mui/icons-material/Grid3x3";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -17,42 +12,91 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import HomeIcon from "@mui/icons-material/Home";
 import Person3Icon from "@mui/icons-material/Person3";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import StickerTable from "../components/stickers/StickerTable";
 import { FireNotification } from "../utils/FireNotificiation";
+import { AuthContext } from "../context/AuthenticationContext";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Swal from "sweetalert2";
+import { FireErrorNotification } from "../utils/FireNotificiation";
+import TrackOrder from "../components/orders/TrackOrder";
+import OrderProducts from "../components/orders/OrderProducts";
 
 const PreviewOrder = () => {
   const { id } = useParams();
-  const URL = `http://localhost:5000/api/orders/${id}`;
   const [order, setOrder] = useState<PreviewOrderInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
   const [reload, setReload] = useState<boolean>(true);
   const [rating, setRating] = useState<number>(0);
+  const AuthCtx = useContext(AuthContext);
+  const BASE_URL = "http://localhost:5000/api/orders";
+  const navigate = useNavigate();
 
   useEffect(() => {
+    setError(null);
+    setLoading(true);
     axios
-      .get(URL)
+      .get(`${BASE_URL}/${id}/${AuthCtx.state.user?._id}`, {
+        headers: {
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         setOrder(res.data);
-        setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setError(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [reload]);
 
-  const CalcDateDiff = (date: Date, min: number, max: number = Infinity) => {
-    const diff =
-      Math.abs(date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
-    return diff >= min && diff < max;
+  const CancelOrderHandler = () => {
+    Swal.fire({
+      title: "You are about to cancel your order. Are you sure?",
+      showDenyButton: true,
+      confirmButtonText: "Yes",
+      confirmButtonColor: "#ff1867",
+      denyButtonColor: "#27282c",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `${BASE_URL}/cancel-order/${order?.orderID}/${AuthCtx.state.user?._id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${AuthCtx.state.token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((res) => {
+            FireErrorNotification("Your order has been caneled.");
+            navigate(`/my-orders/${AuthCtx.state.user?._id}`);
+          })
+          .catch((err) => console.error(err));
+      }
+    });
   };
 
   const RateOrder = () => {
     axios
-      .post("http://localhost:5000/api/orders/set-rating", {
-        orderID: order?.orderID,
-        rating: rating,
-      })
+      .post(
+        `http://localhost:5000/api/orders/set-rating/${AuthCtx.state.user?._id}`,
+        {
+          orderID: order?.orderID,
+          rating: rating,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         FireNotification(res.data);
         setReload((prev) => !prev);
@@ -68,9 +112,33 @@ const PreviewOrder = () => {
     );
   }
 
+  if (error !== null) {
+    return <div className="loader-wrapper2">{error.response.data}</div>;
+  }
+
   return (
     <div className="container my-5">
-      <h1 className="mb-5 dashboard-h">Preview Order</h1>
+      <div className="mb-5 d-flex justify-content-between align-items-center">
+        <h1 className="dashboard-h">Preview Order</h1>
+        <div className="d-flex gap-2">
+          <Link
+            to={`/my-orders/${AuthCtx.state.user?._id}`}
+            className="custom-buttons rounded"
+          >
+            My orders
+            <ListAltIcon />
+          </Link>
+          {order?.status === "Placed" && (
+            <button
+              className="custom-buttons rounded"
+              onClick={CancelOrderHandler}
+            >
+              Cancel order
+              <CancelIcon />
+            </button>
+          )}
+        </div>
+      </div>
       {order && (
         <>
           <div className="order-preview">
@@ -191,177 +259,9 @@ const PreviewOrder = () => {
                 </p>
               </div>
             </div>
-            <div className="order-products">
-              <h3 className="mb-4">Products</h3>
-              <StickerTable
-                stickers={order.stickersDetails}
-                totalPrice={order.totalPrice}
-              />
-            </div>
+            <OrderProducts order={order} />
           </div>
-          <div className="track-order">
-            <h3 className="mb-4">Track Order</h3>
-            <div className="d-flex">
-              <div className="d-flex flex-column gap-4">
-                <div className="order-placed">
-                  <div className="step">
-                    <div className="circle-first"></div>
-                    <div className="icon-wrapper">
-                      <NoteAltIcon
-                        style={{ color: "white" }}
-                        fontSize="large"
-                      />
-                    </div>
-                    <div>
-                      <p className="fw-bold">Order Placed</p>
-                      <span className="text-muted">
-                        We have received your order on{" "}
-                        {order.date.substring(0, 10)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-confirmed">
-                  <div
-                    className={
-                      order.status === "Confirmed" ? "step" : "step step-inv"
-                    }
-                  >
-                    <div className="circle"></div>
-                    <div className="icon-wrapper">
-                      <CreditScoreIcon
-                        style={{ color: "white" }}
-                        fontSize="large"
-                      />
-                    </div>
-                    <div>
-                      <p className="fw-bold">Order Confirmed</p>
-                      <span className="text-muted">
-                        We have confirmed your order{" "}
-                        {order.confirmationDate && (
-                          <>on {order.confirmationDate.substring(0, 10)}</>
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-processed">
-                  <div
-                    className={
-                      order.confirmationDate &&
-                      CalcDateDiff(
-                        new Date(order.confirmationDate.toString()),
-                        1
-                      )
-                        ? "step"
-                        : "step step-inv"
-                    }
-                  >
-                    <div className="circle"></div>
-                    <div className="icon-wrapper">
-                      <DoneOutlineIcon
-                        style={{ color: "white" }}
-                        fontSize="large"
-                      />
-                    </div>
-                    <div>
-                      <p className="fw-bold">Order Processed</p>
-                      <span className="text-muted">
-                        We are preparing your order
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-ready-to-ship">
-                  <div
-                    className={
-                      order.confirmationDate &&
-                      (CalcDateDiff(
-                        new Date(order.confirmationDate.toString()),
-                        2,
-                        3
-                      ) ||
-                        new Date(order.estimatedDelivery) <= new Date())
-                        ? "step"
-                        : "step step-inv"
-                    }
-                  >
-                    <div className="circle"></div>
-                    <div className="icon-wrapper">
-                      <NoCrashIcon
-                        style={{ color: "white" }}
-                        fontSize="large"
-                      />
-                    </div>
-                    <div>
-                      <p className="fw-bold">Ready to Ship</p>
-                      <span className="text-muted">
-                        Your order is ready for shipping
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-out-for-delivery">
-                  <div
-                    className={
-                      order.confirmationDate &&
-                      CalcDateDiff(
-                        new Date(order.confirmationDate.toString()),
-                        3
-                      )
-                        ? "step"
-                        : "step step-inv"
-                    }
-                  >
-                    <div className="circle"></div>
-                    <div className="icon-wrapper">
-                      <LocalShippingIcon
-                        style={{ color: "white" }}
-                        fontSize="large"
-                      />
-                    </div>
-                    <div>
-                      <p className="fw-bold">Out for Delivery</p>
-                      <span className="text-muted">
-                        Your order is out for delivery
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-delivered">
-                  <div
-                    className={
-                      new Date() >= new Date(order.estimatedDelivery)
-                        ? "step"
-                        : "step step-inv"
-                    }
-                  >
-                    <div className="circle"></div>
-                    <div className="icon-wrapper">
-                      <InventoryIcon
-                        style={{ color: "white" }}
-                        fontSize="large"
-                      />
-                    </div>
-                    <div>
-                      <p className="fw-bold">Delivered</p>
-                      {new Date(order.estimatedDelivery) < new Date() ? (
-                        <span className="text-muted">
-                          Your order has been delivered on{" "}
-                          {order.estimatedDelivery.substring(0, 10)}
-                        </span>
-                      ) : (
-                        <span className="text-muted">
-                          Your order should be delivered on{" "}
-                          {new Date(order.estimatedDelivery).toString().substring(4, 15)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TrackOrder order={order} />
         </>
       )}
     </div>

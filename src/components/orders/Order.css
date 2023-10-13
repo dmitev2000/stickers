@@ -151,15 +151,22 @@
 }
 
 .track-order {
-  box-shadow: 0 0 5px gray;
-  padding: 15px 25px;
-  margin: 10px auto;
+  margin: 25px auto;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  max-width: 600px;
+  width: 100%;
+}
+
+.track-order h3 {
+  background-color: #ff1867;
+  color: white;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .step {

@@ -7,16 +7,19 @@ import Navbar from "./components/navbar/Navbar";
 import { FilterContextProvider } from "./context/FilterContext";
 import { AuthContextProvider } from "./context/AuthenticationContext";
 import { CartContextProvider } from "./context/CartContext";
+import { FavoritesContextProvider } from "./context/FavoritesContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <AuthContextProvider>
       <CartContextProvider>
-        <Navbar />
-        <FilterContextProvider>
-          <App />
-        </FilterContextProvider>
-        {/* <Footer /> */}
+        <FavoritesContextProvider>
+          <Navbar />
+          <FilterContextProvider>
+            <App />
+          </FilterContextProvider>
+          {/* <Footer /> */}
+        </FavoritesContextProvider>
       </CartContextProvider>
     </AuthContextProvider>
   </BrowserRouter>

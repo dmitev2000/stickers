@@ -7,6 +7,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import Tooltip from "@mui/material/Tooltip";
 import "./Navbar.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import FavoritesIndicator from "../stickers/FavoritesIndicator";
 
 const Navbar = () => {
   const AuthCtx = useContext(AuthContext);
@@ -28,7 +29,7 @@ const Navbar = () => {
           <>
             {AuthCtx.state.user?.role === "Admin" && (
               <div
-                className="d-flex align-items-center mx-4"
+                className="d-flex align-items-center"
                 style={{ cursor: "pointer", color: "#ff1867" }}
               >
                 <Link to="/admin/dashboard" className="admin-dashboard-link">
@@ -38,6 +39,7 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
+            <FavoritesIndicator />
             <CartIndicator />
             <AccountMenu />
           </>

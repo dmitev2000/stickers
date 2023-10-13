@@ -29,6 +29,14 @@ export interface CartContextType {
   emptyCart: () => void;
 }
 
+export interface FavStickersType {
+  stickerList: string[],
+  totalStickers: number,
+  clearFavorites: () => void,
+  addStickerToFavorites: (stickerID: string) => void,
+  removeStickerFromFavorites: (stickerID: string) => void,
+}
+
 export interface StickerInOrder {
   stickerID: string;
   quantity: number;

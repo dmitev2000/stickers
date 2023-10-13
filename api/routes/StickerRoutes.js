@@ -5,7 +5,6 @@ import {
   GetStickerById,
   GetPendingStickers,
   UpdateStickerStatus,
-  GetFavoriteStickers,
   GetStickersFromOrder,
 } from "../controllers/StickerController.js";
 import multer from "multer";
@@ -29,8 +28,6 @@ router.get("/", GetStickers);
 router.get("/:id", GetStickerById);
 
 router.get("/get/pending", GetPendingStickers);
-
-router.get("/get/favorite", GetFavoriteStickers);
 
 router.post("/add", VerifyToken, upload.single("image"), AddSticker);
 

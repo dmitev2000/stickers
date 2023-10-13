@@ -141,3 +141,129 @@
   border: none;
   border-radius: 5px;
 }
+
+.export-csv-btn {
+  background-color: #ff1867;
+  color: white;
+  border: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.reload-btn:hover, .export-csv-btn:hover {
+  opacity: .8;
+}
+
+.fav-sticker {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  box-shadow: 1px 1px 5px #27282c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.fav-sticker img {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 280px;
+  height: 280px;
+  z-index: 1;
+}
+
+.fav-sticker .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* background-color: rgba(39, 40, 44, 0.7); */
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 10;
+  transition: all 0.4s;
+}
+
+.fav-sticker .title {
+  transform: scale(0);
+  transition: all 0.4s;
+  color: #27282c;
+  font-size: 34px;
+  text-align: center;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  z-index: 20;
+}
+
+.fav-sticker .price {
+  position: absolute;
+  padding: 15px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: -50px;
+  right: -100px;
+  z-index: 20;
+  transition: all 0.4s;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.fav-sticker .remove {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 40px;
+  height: 40px;
+  z-index: 20;
+  transition: all 0.4s;
+  background-color: #ff1867;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.fav-sticker .add {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 40px;
+  height: 40px;
+  z-index: 20;
+  transition: all 0.4s;
+  background-color: #ff1867;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.fav-sticker:hover .overlay {
+  opacity: 1;
+}
+
+.fav-sticker:hover .title {
+  transform: scale(1);
+}
+.fav-sticker:hover .remove {
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.fav-sticker:hover .add {
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+}
+
+.fav-sticker:hover .price {
+  right: 0;
+  bottom: 0;
+}

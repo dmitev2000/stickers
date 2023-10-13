@@ -242,7 +242,7 @@ html {
 }
 
 .not-found .h-link:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .auth-wrapper {
@@ -383,7 +383,8 @@ tfoot {
   min-height: 80px;
 }
 
-.cart-buttons {
+.cart-buttons,
+.custom-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -398,7 +399,8 @@ tfoot {
   margin: 10px 0;
 }
 
-.cart-buttons:hover {
+.cart-buttons:hover,
+.custom-buttons:hover {
   opacity: 0.9;
   color: white;
 }
@@ -463,8 +465,7 @@ tfoot {
 
 .link:hover {
   color: white;
-  opacity: 0.9;
-  box-shadow: 0 0 5px #ff1867;
+  opacity: 0.8;
 }
 
 .dashboard-h {

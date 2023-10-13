@@ -14,13 +14,20 @@ const MyOrders = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/api/orders/my-orders/${AuthCtx.state.user?._id}`
+        `http://localhost:5000/api/orders/get/my-orders/${AuthCtx.state.user?._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+          },
+        }
       )
       .then((res) => {
         setOrders(res.data);
-        setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
@@ -49,7 +56,7 @@ const MyOrders = () => {
       ) : (
         <div className="pb-5">
           <h1 className="my-5 dashboard-h">My Orders</h1>
-          <OrderList orders={orders} />
+          <OrderList orders={orders} view="User" />
         </div>
       )}
     </div>

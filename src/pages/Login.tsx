@@ -4,10 +4,14 @@ import { AuthContext } from "../context/AuthenticationContext";
 import CartContext from "../context/CartContext";
 import axios from "axios";
 import { FireNotification } from "../utils/FireNotificiation";
+import { GetContextData } from "../utils/GetContextData";
+import FavoritesContext from "../context/FavoritesContext";
+import { Sticker } from "../interfaces/Interfaces";
 
 const Login = () => {
   const AuthCtx = useContext(AuthContext);
   const CartCtx = useContext(CartContext);
+  const FavsCtx = useContext(FavoritesContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const BASE_URL = "http://localhost:5000/api";
@@ -22,20 +26,26 @@ const Login = () => {
         password: password,
       })
       .then((res) => {
-        AuthCtx.dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-        axios
-          .get(`${BASE_URL}/cart/${res.data.user._id}`)
+        const login_data = res.data;
+        GetContextData(res.data.token, res.data.user?._id)
           .then((res) => {
-            for (var i = 0; i < res.data.length; i++) {
+            AuthCtx.dispatch({ type: "LOGIN_SUCCESS", payload: login_data });
+            console.log(res);
+            for (var i = 0; i < res?.cart_data.length; i++) {
+              const current = res?.cart_data[i];
               CartCtx.addSticker({
-                sticker: res.data[i].sticker,
-                quantity: res.data[i].quantity,
+                sticker: current.sticker,
+                quantity: current.quantity,
               });
+            }
+            for (var i = 0; i < res?.favs_data.length; i++) {
+              const current = res?.favs_data[i] as Sticker;
+              FavsCtx.addStickerToFavorites(current._id);
             }
             FireNotification("Great! Successfully logged in. Enjoy!");
             navigate("/");
           })
-          .catch((err) => console.error(err));
+          .catch((err) => console.log(err));
       })
       .catch((err) => {
         AuthCtx.dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });

@@ -1,20 +1,20 @@
-import { useContext } from "react";
-import CartContext from "../context/CartContext";
-import { AuthContext } from "../context/AuthenticationContext";
-import CartList from "../components/cart/CartList";
-import shoppingcart from "../assets/shopping-cart.svg";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { FireErrorNotification } from "../utils/FireNotificiation";
+import { AuthContext } from "../context/AuthenticationContext";
+import shoppingcart from "../assets/shopping-cart.svg";
+import CartList from "../components/cart/CartList";
+import CartContext from "../context/CartContext";
+import { BASE_URL } from "../utils/API_URLs";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { FireErrorNotification } from "../utils/FireNotificiation";
 
 const Cart = () => {
   const AuthCtx = useContext(AuthContext);
   const CartCtx = useContext(CartContext);
-  const BASE_URL = "http://localhost:5000/api/cart";
 
   const EmptyCartHandler = () => {
     Swal.fire({
@@ -26,7 +26,12 @@ const Cart = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`${BASE_URL}/empty-cart`, { userID: AuthCtx.state.user?._id })
+          .delete(`${BASE_URL}/cart/empty-cart/${AuthCtx.state.user?._id}`, {
+            headers: {
+              Authorization: `Bearer ${AuthCtx.state.token}`,
+              "Content-Type": "application/json",
+            },
+          })
           .then((res) => {
             CartCtx.emptyCart();
             FireErrorNotification("Your cart is now empty.");
@@ -53,6 +58,7 @@ const Cart = () => {
         </div>
       ) : (
         <div className="py-5">
+          <h1 className="mb-5 dashboard-h">Shopping Cart</h1>
           <CartList CartList={CartCtx.stickerList} />
           <div className="d-flex justify-content-end gap-3">
             <button className="cart-buttons" onClick={EmptyCartHandler}>

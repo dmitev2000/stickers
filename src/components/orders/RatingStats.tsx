@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { RatingStatsInterface } from "../../interfaces/Interfaces";
 import StarPurple500Icon from "@mui/icons-material/StarPurple500";
@@ -6,20 +6,28 @@ import PercentIcon from "@mui/icons-material/Percent";
 import StarIcon from "@mui/icons-material/Star";
 import Tooltip from "@mui/material/Tooltip";
 import Loader from "../loader/Loader";
+import { AuthContext } from "../../context/AuthenticationContext";
 
 const RatingStats = () => {
+  const AuthCtx = useContext(AuthContext);
   const [data, setData] = useState<RatingStatsInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
     axios
-      .get("http://localhost:5000/api/orders/get/rating-stats")
+      .get("http://localhost:5000/api/orders/get/rating-stats", {
+        headers: {
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+        },
+      })
       .then((res) => {
         setData(res.data);
-        setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -29,6 +37,17 @@ const RatingStats = () => {
         style={{ minHeight: "250px" }}
       >
         <Loader />
+      </div>
+    );
+  }
+
+  if (error !== null) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "250px" }}
+      >
+        {error.response.data}
       </div>
     );
   }
@@ -69,7 +88,7 @@ const RatingStats = () => {
         <span className="mb-2">
           <StarIcon color="warning" />
           {data?.avgRating.toFixed(2)}
-          </span>
+        </span>
         <p className="from-to text-muted text-center">
           Total orders: {data?.totalOrders}
           <br />

@@ -14,10 +14,12 @@ import { AuthContext } from "../../context/AuthenticationContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FireNotification } from "../../utils/FireNotificiation";
 import CartContext from "../../context/CartContext";
+import FavoritesContext from "../../context/FavoritesContext";
 
 const AccountMenu = () => {
   const AuthCtx = React.useContext(AuthContext);
   const CartCtx = React.useContext(CartContext);
+  const FavsCtx = React.useContext(FavoritesContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -35,6 +37,8 @@ const AccountMenu = () => {
     FireNotification("You are now logged out");
     localStorage.setItem("cartItems", JSON.stringify([]));
     CartCtx.emptyCart();
+    localStorage.setItem("favStickers", JSON.stringify([]));
+    FavsCtx.clearFavorites();
     navigate("/");
   };
 

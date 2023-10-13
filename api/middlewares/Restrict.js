@@ -31,8 +31,8 @@ export const VerifyUser = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader.split(" ")[1];
     const payload = jwt.verify(token, process.env.JWT);
-    const { user_id } = payload;
-    if (user_id !== +req.params.user_id) {
+    const { id } = payload;
+    if (id !== req.params.user_id) {
       return next(CreateError(403, "You are not authorized."));
     } else {
       return next();

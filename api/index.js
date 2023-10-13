@@ -12,6 +12,7 @@ import AuthenticationRoutes from "./routes/AuthenticationRoutes.js";
 import UserCartRoutes from "./routes/UserCartRoutes.js";
 import OrderRoutes from "./routes/OrderRoutes.js";
 import RejectedStickersRoutes from "./routes/RejectedStickerRoutes.js";
+import FavoriteStickersRoutes from "./routes/UserFavoritesRoutes.js";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/api/auth", AuthenticationRoutes);
 app.use("/api/cart", UserCartRoutes);
 app.use("/api/orders", OrderRoutes);
 app.use("/api/rejected", RejectedStickersRoutes);
+app.use("/api/favorites", FavoriteStickersRoutes);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;

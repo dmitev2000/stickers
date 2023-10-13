@@ -7,10 +7,11 @@ import {
   RemoveItemFromCart,
   UpdateCart,
 } from "../controllers/UserCartController.js";
+import { VerifyToken, VerifyUser } from "../middlewares/Restrict.js";
 
 const router = express.Router();
 
-router.get("/:id", GetCartItems);
+router.get("/:user_id", VerifyToken, VerifyUser, GetCartItems);
 
 router.post("/update-cart", UpdateCart);
 
@@ -20,6 +21,6 @@ router.post("/decrement-quantity", DecrementQuantity);
 
 router.post("/remove-item-from-cart", RemoveItemFromCart);
 
-router.post("/empty-cart", EmptyCart);
+router.delete("/empty-cart/:user_id", VerifyToken, VerifyUser, EmptyCart);
 
 export default router;

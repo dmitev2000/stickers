@@ -1,11 +1,12 @@
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../../context/AuthenticationContext";
-import { Link, useNavigate } from "react-router-dom";
-import StickerRequests from "./StickerRequests";
 import { ReloadDashboardContextProvider } from "../../context/ReloadDashboardContext";
-import RejectedStickers from "./RejectedStickers";
-import PlacedOrders from "./PlacedOrders";
+import ConfirmedOrders from "../../components/orders/ConfirmedOrders";
+import { AuthContext } from "../../context/AuthenticationContext";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import { Link, useNavigate } from "react-router-dom";
+import RejectedStickers from "./RejectedStickers";
+import StickerRequests from "./StickerRequests";
+import { useContext, useEffect } from "react";
+import PlacedOrders from "./PlacedOrders";
 import UsersInfo from "./UsersInfo";
 
 const Dashboard = () => {
@@ -27,6 +28,7 @@ const Dashboard = () => {
         <RejectedStickers />
         <h3 className="mt-5 dashboard-h">Orders</h3>
         <PlacedOrders />
+        <ConfirmedOrders />
         <Link className="link" to="/admin/order-statistics">
           <QueryStatsIcon fontSize="small" /> Order statistics
         </Link>

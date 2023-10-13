@@ -27,22 +27,43 @@ const Checkout = () => {
     });
 
     axios
-      .post("http://localhost:5000/api/orders", {
-        userID: AuthCtx.state.user?._id,
-        stickerList: dataToSend,
-        totalPrice: CartCtx.totalPrice.toFixed(2),
-        shippingDetails: {
-          fullname: fullname,
-          city: city,
-          address: address,
-          phone_number: phone_number,
+      .post(
+        "http://localhost:5000/api/orders",
+        {
+          userID: AuthCtx.state.user?._id,
+          stickerList: dataToSend,
+          totalPrice: CartCtx.totalPrice.toFixed(2),
+          shippingDetails: {
+            fullname: fullname,
+            city: city,
+            address: address,
+            phone_number: phone_number,
+          },
+          estimatedDelivery: new Date().setDate(new Date().getDate() + 4),
         },
-        estimatedDelivery: new Date().setDate(new Date().getDate() + 4),
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+          },
+        }
+      )
       .then((res) => {
         FireNotification(res.data);
-        CartCtx.emptyCart();
-        navigate("/");
+        axios
+          .delete(
+            `http://localhost:5000/api/cart/empty-cart/${AuthCtx.state.user?._id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${AuthCtx.state.token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then(() => {
+            CartCtx.emptyCart();
+            navigate("/");
+          })
+          .catch((err) => console.log(err.response.data));
       })
       .catch((err) => console.log(err));
   };

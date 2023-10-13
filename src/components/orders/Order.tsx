@@ -5,12 +5,27 @@ import Tooltip from "@mui/material/Tooltip";
 import { Link } from "react-router-dom";
 import "./Order.css";
 
-const Order = ({ orderDetails }: { orderDetails: OrderType }) => {
+const Order = ({
+  orderDetails,
+  view,
+}: {
+  orderDetails: OrderType;
+  view: string;
+}) => {
   return (
     <tr>
       <td>
         <div className="td-data">{orderDetails._id}</div>
       </td>
+      {view === "Admin" && (
+        <td>
+          <div className="td-data justify-content-start">
+            <Tooltip title={orderDetails.shippingDetails.fullname}>
+              <span>{orderDetails.userID}</span>
+            </Tooltip>
+          </div>
+        </td>
+      )}
       <td>
         <div className="td-data">
           {orderDetails.createdAt.toString().substring(0, 10)}
@@ -19,18 +34,22 @@ const Order = ({ orderDetails }: { orderDetails: OrderType }) => {
       <td>
         <div className="td-data">${orderDetails.totalPrice.toFixed(2)}</div>
       </td>
-      <td>
-        <div className="td-data justify-content-center">
-          {orderDetails.stickerList.reduce((accumulator, current) => {
-            return accumulator + current.quantity;
-          }, 0)}
-        </div>
-      </td>
-      <td>
-        <div className="td-data justify-content-center">
-          {orderDetails.stickerList.length}
-        </div>
-      </td>
+      {view === "User" && (
+        <td>
+          <div className="td-data justify-content-center">
+            {orderDetails.stickerList.reduce((accumulator, current) => {
+              return accumulator + current.quantity;
+            }, 0)}
+          </div>
+        </td>
+      )}
+      {view === "User" && (
+        <td>
+          <div className="td-data justify-content-center">
+            {orderDetails.stickerList.length}
+          </div>
+        </td>
+      )}
       <td>
         <div className="status">
           <span
@@ -57,7 +76,7 @@ const Order = ({ orderDetails }: { orderDetails: OrderType }) => {
               <p className="mb-0 table-rating">{orderDetails.rating}</p>
             </>
           ) : (
-            <p className="mb-0 not-rated table-rating">Not rated yet</p>
+            <p className="mb-0 not-rated table-rating">Not rated</p>
           )}
         </div>
       </td>

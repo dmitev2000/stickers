@@ -5,6 +5,8 @@ import CurrentMonthStats from "../../components/orders/CurrentMonthStats";
 import RatingStats from "../../components/orders/RatingStats";
 
 const OrderStatistics = () => {
+  window.scrollTo(0, 0);
+
   return (
     <div className="container py-5 stats">
       <h1 className="mb-5 dashboard-h">Order statistics</h1>

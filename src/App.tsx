@@ -12,6 +12,7 @@ import MyOrders from "./pages/MyOrders";
 import PreviewOrder from "./pages/PreviewOrder";
 import OrderStatistics from "./pages/admin/OrderStatistics";
 import Forbidden from "./pages/Forbidden";
+import PopularStickers from "./pages/PopularStickers";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
       <Route path="/my-orders/:id" element={<MyOrders />} />
       <Route path="/my-orders/preview-order/:id" element={<PreviewOrder />} />
       <Route path="/create-sticker" element={<CreateSticker />} />
-      <Route path="/favorites" element={<FavoriteStickers />} />
+      <Route path="/favorites/:user_id" element={<FavoriteStickers />} />
+      <Route path="/popular" element={<PopularStickers />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />

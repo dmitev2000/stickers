@@ -3,8 +3,8 @@ import { CreateError } from "../utils/Error.js";
 
 export const GetCartItems = async (req, res, next) => {
   try {
-    const userID = req.params.id;
-    const cart = await UserCart.findOne({ userID: userID });
+    const { user_id } = req.params;
+    const cart = await UserCart.findOne({ userID: user_id });
     if (!cart) {
       return next(CreateError(404, "Invalid user ID"));
     }
@@ -137,14 +137,14 @@ export const DecrementQuantity = async (req, res, next) => {
 
 export const EmptyCart = async (req, res, next) => {
   try {
-    const cart = await UserCart.findOne({ userID: req.body.userID });
+    const cart = await UserCart.findOne({ userID: req.params.user_id });
 
     if (!cart) {
       return next(CreateError(400, "Bad request."));
     }
 
     await UserCart.updateOne(
-      { userID: req.body.userID },
+      { userID: req.params.user_id },
       { $set: { stickerList: [] } }
     );
 

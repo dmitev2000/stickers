@@ -81,7 +81,6 @@ export const CartContextProvider = (props: any) => {
   };
 
   const removeSticker = (item: any) => {
-    console.log(item.sticker);
     setStickerList((prev: any) =>
       prev.filter((s: any) => {
         return s.sticker._id !== item.sticker._id;

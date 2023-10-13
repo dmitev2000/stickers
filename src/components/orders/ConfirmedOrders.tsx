@@ -1,18 +1,21 @@
+import ReloadDashboardContext from "../../context/ReloadDashboardContext";
+import DashboardLoader from "../../components/loader/DashboardLoader";
+import { FireErrorNotification } from "../../utils/FireNotificiation";
+import { AuthContext } from "../../context/AuthenticationContext";
 import React, { useEffect, useState, useContext } from "react";
-import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import axios from "axios";
-import DashboardLoader from "../../components/loader/DashboardLoader";
-import ReloadDashboardContext from "../../context/ReloadDashboardContext";
 import SummarizeIcon from "@mui/icons-material/Summarize";
+import Typography from "@mui/material/Typography";
+import { BASE_URL } from "../../utils/API_URLs";
+import Accordion from "@mui/material/Accordion";
 import Badge from "@mui/material/Badge";
-import PlacedOrdersList from "../../components/orders/PlacedOrdersList";
-import { AuthContext } from "../../context/AuthenticationContext";
+import OrderList from "./OrderList";
+import { saveAs } from "file-saver";
+import axios from "axios";
 
-const PlacedOrders = () => {
+const ConfirmedOrders = () => {
   const AuthCtx = useContext(AuthContext);
   const ReloadCtx = useContext(ReloadDashboardContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -28,20 +31,38 @@ const PlacedOrders = () => {
   useEffect(() => {
     setError(null);
     axios
-      .get("http://localhost:5000/api/orders/get/placed", {
+      .get(`${BASE_URL}/orders/get/confirmed`, {
         headers: {
           Authorization: `Bearer ${AuthCtx.state.token}`,
         },
       })
       .then((res) => {
         setData(res.data);
-        setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
         setError(err.response.data);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [ReloadCtx.reloadPlacedOrders]);
+  }, [ReloadCtx.reloadConfirmedOrders, ReloadCtx.reloadPlacedOrders]);
+
+  const ExportToCSV = () => {
+    axios
+      .get(`${BASE_URL}/orders/export-orders-to-csv`, {
+        headers: {
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+        },
+        responseType: "blob",
+      })
+      .then((res) => {
+        const blob = new Blob([res.data], { type: "text/csv" });
+        saveAs(blob, `orders_${new Date().toISOString()}.csv`);
+      })
+      .catch((err) => {
+        FireErrorNotification("Export failed. Try again...");
+      });
+  };
 
   return (
     <div className="my-4">
@@ -57,12 +78,18 @@ const PlacedOrders = () => {
         >
           <Typography sx={{ width: "33%", flexShrink: 0, fontWeight: "bold" }}>
             <Badge badgeContent={data.length} color="success">
-              Placed orders <SummarizeIcon style={{ marginLeft: "10px" }} />
+              Confirmed orders <SummarizeIcon style={{ marginLeft: "10px" }} />
             </Badge>
           </Typography>
           <Typography sx={{ color: "text.secondary" }}>
-            List of all placed orders / Confirm orders
+            List of all confirmed orders
           </Typography>
+          <button
+            className="mx-5 export-csv-btn rounded fw-bold"
+            onClick={ExportToCSV}
+          >
+            Export to CSV
+          </button>
         </AccordionSummary>
         <AccordionDetails>
           {loading ? (
@@ -74,14 +101,14 @@ const PlacedOrders = () => {
               <p className="text-danger m-0">{error}</p>
             </div>
           ) : data.length === 0 ? (
-            <p className="text-muted">There are no placed orders.</p>
+            <p className="text-muted">There are no confirmed orders.</p>
           ) : (
-            <PlacedOrdersList placedOrders={data} />
+            <OrderList orders={data} view="Admin" />
           )}
           <button
             className="reload-btn fw-bold"
             onClick={() => {
-              ReloadCtx.UpdateReloadPlacedOrders();
+              ReloadCtx.UpdateReloadConfirmedOrders();
             }}
           >
             Reload
@@ -92,4 +119,4 @@ const PlacedOrders = () => {
   );
 };
 
-export default PlacedOrders;
+export default ConfirmedOrders;

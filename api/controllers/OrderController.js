@@ -1,6 +1,7 @@
-import Order from "../models/OrderModel.js";
-import Sticker from "../models/StickerModel.js";
 import { CreateError } from "../utils/Error.js";
+import Sticker from "../models/StickerModel.js";
+import Order from "../models/OrderModel.js";
+import { Parser } from "json2csv";
 
 export const GetAllOrders = async (req, res, next) => {
   try {
@@ -39,7 +40,7 @@ export const PlaceOrder = async (req, res, next) => {
 
 export const GetOrder = async (req, res, next) => {
   try {
-    const order = await Order.find({ _id: req.params.id });
+    const order = await Order.find({ _id: req.params.order_id });
 
     if (!order) {
       return next(CreateError(400, "Invalid order ID."));
@@ -75,10 +76,27 @@ export const GetOrder = async (req, res, next) => {
   }
 };
 
+export const CancelOrder = async (req, res, next) => {
+  try {
+    const orderToCancel = await Order.findById(req.params.order_id);
+    if (!orderToCancel) {
+      return next(CreateError(404, "This order does not exist."));
+    }
+    if (orderToCancel.status !== "Placed") {
+      return next(CreateError(404, "You can't cancel this order."));
+    }
+    await Order.deleteOne({ _id: req.params.order_id });
+
+    res.status(200).json("Your order has been canceled.");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const GetOrdersByUser = async (req, res, next) => {
   try {
     const orders = await Order.find({ userID: req.params.user_id }).sort({
-      totalPrice: 1,
+      totalPrice: "desc",
     });
     res.status(200).json(orders);
   } catch (error) {
@@ -89,6 +107,15 @@ export const GetOrdersByUser = async (req, res, next) => {
 export const GetPlacedOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ status: "Placed" });
+    res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const GetConfirmedOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find({ status: "Confirmed" });
     res.status(200).json(orders);
   } catch (error) {
     next(error);
@@ -399,6 +426,30 @@ export const RatingStats = async (req, res, next) => {
       ratedOrders: rated_orders.length,
       avgRating: +(rating_sum / rated_orders.length).toFixed(2),
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const ExportOrdersToCSV = async (req, res, next) => {
+  try {
+    const orders = await Order.find(
+      { status: "Confirmed" },
+      "_id userID createdAt totalPrice"
+    );
+
+    const filteredOrders = orders.map((order) => ({
+      Order_ID: order._id,
+      User_ID: order.userID,
+      Date: order.createdAt.toISOString(),
+      Price: order.totalPrice,
+    }));
+
+    const file_header = ["Order_ID", "User_ID", "Date", "Price"];
+    const json_data = new Parser({ file_header });
+    const csv_data = json_data.parse(filteredOrders);
+    //res.status(200).json(filteredOrders);
+    res.status(200).type("text/csv").attachment("orders.csv").end(csv_data);
   } catch (error) {
     next(error);
   }
