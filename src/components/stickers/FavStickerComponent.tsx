@@ -2,6 +2,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { AuthContext } from "../../context/AuthenticationContext";
 import { FireNotification } from "../../utils/FireNotificiation";
+import FavoritesContext from "../../context/FavoritesContext";
 import { BASE_URL, IMG_URL } from "../../utils/API_URLs";
 import { Sticker } from "../../interfaces/Interfaces";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,6 +15,7 @@ import "./Stickers.css";
 const FavStickerComponent = ({ sticker_data }: { sticker_data: Sticker }) => {
   const AuthCtx = useContext(AuthContext);
   const CartCtx = useContext(CartContext);
+  const FavsCtx = useContext(FavoritesContext);
 
   const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -23,11 +25,30 @@ const FavStickerComponent = ({ sticker_data }: { sticker_data: Sticker }) => {
       color: "black",
       boxShadow: theme.shadows[1],
       fontSize: 11,
-      fontWeight: "bold"
+      fontWeight: "bold",
     },
   }));
 
-  const RemoveFromFavs = () => {};
+  const RemoveFromFavs = async () => {
+    try {
+      const res = await axios.put(
+        `${BASE_URL}/favorites/remove/${AuthCtx.state.user?._id}`,
+        {
+          sticker_id: sticker_data._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      FavsCtx.removeStickerFromFavorites(sticker_data._id);
+      FireNotification(res.data);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
 
   const AddToCart = () => {
     axios

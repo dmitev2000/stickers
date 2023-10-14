@@ -154,7 +154,8 @@ html {
 }
 
 .empty-cart,
-.no-orders {
+.no-orders,
+.no-favs {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -162,15 +163,21 @@ html {
   min-height: calc(100vh - 80px);
 }
 
+.no-favs {
+  min-height: calc(100vh - 250px);
+}
+
 .empty-cart h3,
-.no-orders h3 {
+.no-orders h3,
+.no-favs h3 {
   color: #27282c;
   font-weight: bolder;
   font-size: 25px;
 }
 
 .empty-cart h3 span,
-.no-orders h3 span {
+.no-orders h3 span,
+.no-favs h3 span {
   color: #ff1867;
 }
 
@@ -185,6 +192,11 @@ html {
   aspect-ratio: 1/1;
   max-width: 300px;
   transform: translateX(-30px);
+}
+
+.no-favs img {
+  aspect-ratio: 1/1;
+  max-width: 300px;
 }
 
 .empty-cart p,

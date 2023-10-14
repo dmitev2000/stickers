@@ -52,7 +52,7 @@ const Cart = () => {
           <p className="text-muted">
             Looks like you haven't add anything to your cart yet.
           </p>
-          <Link to="/" className="cart-buttons">
+          <Link to="/" className="cart-buttons rounded">
             Browse Stickers
           </Link>
         </div>

@@ -173,6 +173,7 @@
   width: 280px;
   height: 280px;
   z-index: 1;
+  border-radius: 10px;
 }
 
 .fav-sticker .overlay {
