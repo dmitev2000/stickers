@@ -80,8 +80,7 @@ const TrackOrder = ({ order }: { order: PreviewOrderInterface }) => {
                 order.confirmationDate &&
                 (CalcDateDiff(
                   new Date(order.confirmationDate.toString()),
-                  2,
-                  3
+                  2
                 ) ||
                   new Date(order.estimatedDelivery) <= new Date())
                   ? "step"
