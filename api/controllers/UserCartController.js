@@ -1,4 +1,5 @@
 import UserCart from "../models/UserCartModel.js";
+import Sticker from "../models/StickerModel.js";
 import { CreateError } from "../utils/Error.js";
 
 export const GetCartItems = async (req, res, next) => {
@@ -16,7 +17,10 @@ export const GetCartItems = async (req, res, next) => {
 
 export const UpdateCart = async (req, res, next) => {
   try {
-    const cart = await UserCart.findOne({ userID: req.body.userID });
+    const { user_id } = req.params;
+    const { sticker, quantity } = req.body;
+
+    const cart = await UserCart.findOne({ userID: user_id });
 
     if (!cart) {
       return next(CreateError(400, "Bad request."));
@@ -25,20 +29,20 @@ export const UpdateCart = async (req, res, next) => {
     const list = cart.stickerList;
 
     const index = list.findIndex((item) => {
-      return item.sticker._id === req.body.sticker._id;
+      return item.sticker._id === sticker._id;
     });
 
     if (index !== -1) {
       list[index] = {
         sticker: list[index].sticker,
-        quantity: list[index].quantity + req.body.quantity,
+        quantity: list[index].quantity + quantity,
       };
     } else {
-      list.push({ sticker: req.body.sticker, quantity: req.body.quantity });
+      list.push({ sticker: sticker, quantity: quantity });
     }
 
     await UserCart.updateOne(
-      { userID: req.body.userID },
+      { userID: user_id },
       { $set: { stickerList: list } }
     );
 
@@ -48,20 +52,73 @@ export const UpdateCart = async (req, res, next) => {
   }
 };
 
+export const AddMultipleStickersToCart = async (req, res, next) => {
+  try {
+    const { user_id } = req.params;
+    // * stickersToAdd is array of sticker IDs
+    const { stickersToAdd } = req.body;
+
+    if (!user_id || !stickersToAdd || stickersToAdd.length === 0) {
+      return next(CreateError(400, "Bad request."));
+    }
+
+    // ! If cart is null then send Bad Request
+    const cart = await UserCart.findOne({ userID: user_id });
+
+    if (!cart) {
+      return next(CreateError(400, "Bad request."));
+    }
+
+    // TODO: Get the stickers data
+    const stickers_data = await Sticker.find({ _id: { $in: stickersToAdd } });
+
+    const list = cart.stickerList;
+
+    for (let i = 0; i < stickers_data.length; i++) {
+      const index = list.findIndex((item) => {
+        return item.sticker._id === stickers_data[i]._id;
+      });
+
+      if (index !== -1) {
+        list[index] = {
+          sticker: list[index].sticker,
+          quantity: list[index].quantity + 1,
+        };
+      } else {
+        list.push({ sticker: stickers_data[i], quantity: 1 });
+      }
+
+      await UserCart.updateOne(
+        { userID: user_id },
+        { $set: { stickerList: list } }
+      );
+    }
+    res.status(200).json({
+      stickers: stickers_data,
+      message: "Your cart is updated sucessfully.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const RemoveItemFromCart = async (req, res, next) => {
   try {
-    const cart = await UserCart.findOne({ userID: req.body.userID });
+    const { user_id } = req.params;
+    const { stickerID } = req.body;
+
+    const cart = await UserCart.findOne({ userID: user_id });
 
     if (!cart) {
       return next(CreateError(400, "Bad request."));
     }
 
     const cart_items_filtered = cart.stickerList.filter((item) => {
-      return item.sticker._id !== req.body.stickerID;
+      return item.sticker._id !== stickerID;
     });
 
     await UserCart.updateOne(
-      { userID: req.body.userID },
+      { userID: user_id },
       { $set: { stickerList: cart_items_filtered } }
     );
 
@@ -73,10 +130,10 @@ export const RemoveItemFromCart = async (req, res, next) => {
 
 export const IncrementQuantity = async (req, res, next) => {
   try {
-    const userID = req.body.userID;
-    const stickerID = req.body.stickerID;
+    const { user_id } = req.params;
+    const { stickerID } = req.body;
 
-    const cart = await UserCart.findOne({ userID: userID });
+    const cart = await UserCart.findOne({ userID: user_id });
 
     if (!cart) {
       return next(CreateError(400, "Bad request."));
@@ -91,7 +148,7 @@ export const IncrementQuantity = async (req, res, next) => {
     });
 
     await UserCart.updateOne(
-      { userID: req.body.userID },
+      { userID: user_id },
       { $set: { stickerList: list } }
     );
 
@@ -103,10 +160,10 @@ export const IncrementQuantity = async (req, res, next) => {
 
 export const DecrementQuantity = async (req, res, next) => {
   try {
-    const userID = req.body.userID;
-    const stickerID = req.body.stickerID;
+    const { user_id } = req.params;
+    const { stickerID } = req.body;
 
-    const cart = await UserCart.findOne({ userID: userID });
+    const cart = await UserCart.findOne({ userID: user_id });
 
     if (!cart) {
       return next(CreateError(400, "Bad request."));
@@ -125,7 +182,7 @@ export const DecrementQuantity = async (req, res, next) => {
     });
 
     await UserCart.updateOne(
-      { userID: req.body.userID },
+      { userID: req.body.user_id },
       { $set: { stickerList: list } }
     );
 

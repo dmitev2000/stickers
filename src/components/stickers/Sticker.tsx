@@ -13,7 +13,7 @@ import { AuthContext } from "../../context/AuthenticationContext";
 import FavoritesContext from "../../context/FavoritesContext";
 import CartContext from "../../context/CartContext";
 import axios from "axios";
-import { IMG_URL } from "../../utils/API_URLs";
+import { BASE_URL, IMG_URL } from "../../utils/API_URLs";
 
 const Sticker = ({ sticker }: { sticker: any }) => {
   const INITIAL_VALUE = 1;
@@ -21,7 +21,6 @@ const Sticker = ({ sticker }: { sticker: any }) => {
   const CartCtx = useContext(CartContext);
   const AuthCtx = useContext(AuthContext);
   const FavsCtx = useContext(FavoritesContext);
-  const BASE_URL = "http://localhost:5000/api";
 
   const TagsToString = (array: []) => {
     let result = "";
@@ -36,11 +35,19 @@ const Sticker = ({ sticker }: { sticker: any }) => {
 
   const AddToCart = () => {
     axios
-      .post(`${BASE_URL}/cart/update-cart`, {
-        userID: AuthCtx.state.user?._id,
-        sticker: sticker,
-        quantity: value,
-      })
+      .post(
+        `${BASE_URL}/cart/update-cart/${AuthCtx.state.user?._id}`,
+        {
+          sticker: sticker,
+          quantity: value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         CartCtx.addSticker({ sticker: sticker, quantity: value });
         FireNotification(
@@ -73,8 +80,27 @@ const Sticker = ({ sticker }: { sticker: any }) => {
       });
   };
 
-  const RemoveFromFavs = () => {
-    FavsCtx.removeStickerFromFavorites(sticker._id);
+  const RemoveFromFavs = async () => {
+    axios
+      .put(
+        `${BASE_URL}/favorites/remove/${AuthCtx.state.user?._id}`,
+        {
+          sticker_id: sticker._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        FavsCtx.removeStickerFromFavorites(sticker._id);
+        FireErrorNotification(res.data);
+      })
+      .catch((error) => {
+        FireErrorNotification(error.respnse.data);
+      });
   };
 
   return (

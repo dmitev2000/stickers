@@ -291,7 +291,9 @@ html {
 
 .auth-wrapper .form-wrapper {
   padding: 25px;
-  box-shadow: 0 0 25px #ff1867;
+  box-shadow: 0 0 15px #ff1867;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 .auth-wrapper .form-wrapper input[type="submit"] {

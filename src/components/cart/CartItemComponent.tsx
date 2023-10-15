@@ -1,16 +1,18 @@
-import { CartItem } from "../../interfaces/Interfaces";
-import { useContext } from "react";
-import CartContext from "../../context/CartContext";
 import { AuthContext } from "../../context/AuthenticationContext";
-import { FireErrorNotification } from "../../utils/FireNotificiation";
-import axios from "axios";
+import { BASE_URL, IMG_URL } from "../../utils/API_URLs";
+import { CartItem } from "../../interfaces/Interfaces";
+import CartContext from "../../context/CartContext";
+import {
+  FireErrorNotification,
+  FireNotification,
+} from "../../utils/FireNotificiation";
+import { useContext } from "react";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const CartItemComponent = ({ item }: { item: CartItem }) => {
   const CartCtx = useContext(CartContext);
   const AuthCtx = useContext(AuthContext);
-  const BASE_URL = "http://localhost:5000/api/cart";
-  const IMG_URL = "http://localhost:5000/uploads";
 
   const RemoveItemHandler = () => {
     Swal.fire({
@@ -22,10 +24,18 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`${BASE_URL}/remove-item-from-cart`, {
-            userID: AuthCtx.state.user?._id,
-            stickerID: item.sticker._id,
-          })
+          .post(
+            `${BASE_URL}/cart/remove-item-from-cart/${AuthCtx.state.user?._id}`,
+            {
+              stickerID: item.sticker._id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${AuthCtx.state.token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          )
           .then((res) => {
             CartCtx.removeSticker(item);
             FireErrorNotification(
@@ -39,24 +49,42 @@ const CartItemComponent = ({ item }: { item: CartItem }) => {
 
   const IncrementQuantityHandler = () => {
     axios
-      .post(`${BASE_URL}/increment-quantity`, {
-        userID: AuthCtx.state.user?._id,
-        stickerID: item.sticker._id,
-      })
+      .post(
+        `${BASE_URL}/cart/increment-quantity/${AuthCtx.state.user?._id}`,
+        {
+          stickerID: item.sticker._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         CartCtx.increaseQuantity(item);
+        FireNotification("Item quantity changed.");
       })
       .catch((err) => console.error(err));
   };
 
   const DecrementQuantityHandler = () => {
     axios
-      .post(`${BASE_URL}/decrement-quantity`, {
-        userID: AuthCtx.state.user?._id,
-        stickerID: item.sticker._id,
-      })
+      .post(
+        `${BASE_URL}/cart//decrement-quantity/${AuthCtx.state.user?._id}`,
+        {
+          stickerID: item.sticker._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         CartCtx.decreaseQuantity(item);
+        FireErrorNotification("Item quantity changed.");
       })
       .catch((err) => console.error(err));
   };
