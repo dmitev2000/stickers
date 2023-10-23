@@ -6,9 +6,10 @@ import {
   GetPendingStickers,
   UpdateStickerStatus,
   GetStickersFromOrder,
+  GetPopularStickers,
 } from "../controllers/StickerController.js";
 import multer from "multer";
-import { VerifyToken } from "../middlewares/Restrict.js";
+import { VerifyAdmin, VerifyToken } from "../middlewares/Restrict.js";
 
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -29,10 +30,12 @@ router.get("/:id", GetStickerById);
 
 router.get("/get/pending", GetPendingStickers);
 
+router.get("/get/popular", GetPopularStickers);
+
 router.post("/add", VerifyToken, upload.single("image"), AddSticker);
 
 router.post("/stickers-from-order", GetStickersFromOrder);
 
-router.post("/update-status", UpdateStickerStatus);
+router.post("/update-status", VerifyToken, VerifyAdmin, UpdateStickerStatus);
 
 export default router;

@@ -10,12 +10,14 @@ export const GetContextData = async (
     const cart_data = await axios.get(`${BASE_URL}/cart/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     const favs_data = await axios.get(`${BASE_URL}/favorites/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 

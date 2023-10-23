@@ -49,7 +49,7 @@ const MyOrders = () => {
           <p className="text-muted">
             No orders have been found for this account.
           </p>
-          <Link to="/" className="cart-buttons">
+          <Link to="/" className="cart-buttons rounded">
             Browse Stickers
           </Link>
         </div>

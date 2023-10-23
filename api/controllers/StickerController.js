@@ -1,3 +1,4 @@
+import Order from "../models/OrderModel.js";
 import RejectedSticker from "../models/RejectedStickerModel.js";
 import Sticker from "../models/StickerModel.js";
 import { CreateError } from "../utils/Error.js";
@@ -113,6 +114,38 @@ export const UpdateStickerStatus = async (req, res, next) => {
     }
 
     res.status(200).json(`Sticker (${req.body.sticker.title}) status updated.`);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const GetPopularStickers = async (req, res, next) => {
+  try {
+    const confirmedOrders = await Order.find({ status: "Confirmed" }).select(
+      "stickerList"
+    );
+    const result = {};
+    confirmedOrders.forEach((order) => {
+      order.stickerList.forEach((item) => {
+        if (!result.hasOwnProperty(item.stickerID)) {
+          result[item.stickerID] = { orders: 1, count: item.quantity };
+        } else {
+          result[item.stickerID] = {
+            orders: result[item.stickerID].orders + 1,
+            count: result[item.stickerID].count + item.quantity,
+          };
+        }
+      });
+    });
+    const array = Object.keys(result).map((key) => ({ [key]: result[key] }));
+    const topThree = array
+      .map((item) => ({
+        stickerID: Object.keys(item)[0],
+        data: Object.values(item)[0],
+      }))
+      .sort((a, b) => b.data.count - a.data.count)
+      .slice(0, 3);
+    res.status(200).json(topThree);
   } catch (error) {
     next(error);
   }

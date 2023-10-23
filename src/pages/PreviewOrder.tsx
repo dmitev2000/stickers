@@ -21,6 +21,7 @@ import Swal from "sweetalert2";
 import { FireErrorNotification } from "../utils/FireNotificiation";
 import TrackOrder from "../components/orders/TrackOrder";
 import OrderProducts from "../components/orders/OrderProducts";
+import { BASE_URL } from "../utils/API_URLs";
 
 const PreviewOrder = () => {
   const { id } = useParams();
@@ -30,14 +31,13 @@ const PreviewOrder = () => {
   const [reload, setReload] = useState<boolean>(true);
   const [rating, setRating] = useState<number>(0);
   const AuthCtx = useContext(AuthContext);
-  const BASE_URL = "http://localhost:5000/api/orders";
   const navigate = useNavigate();
 
   useEffect(() => {
     setError(null);
     setLoading(true);
     axios
-      .get(`${BASE_URL}/${id}/${AuthCtx.state.user?._id}`, {
+      .get(`${BASE_URL}/orders/${id}/${AuthCtx.state.user?._id}`, {
         headers: {
           Authorization: `Bearer ${AuthCtx.state.token}`,
           "Content-Type": "application/json",
@@ -160,7 +160,8 @@ const PreviewOrder = () => {
                   ${order.totalPrice.toFixed(2)}
                 </span>
               </p>
-              {new Date(order.estimatedDelivery) > new Date() ? (
+              {new Date(order.estimatedDelivery) > new Date() &&
+              order.status !== "Placed" ? (
                 <p>
                   <span className="fw-bold mx-2">
                     <AccessTimeIcon style={{ marginRight: "15px" }} />
@@ -175,10 +176,21 @@ const PreviewOrder = () => {
               ) : (
                 <p className="mx-2">
                   <AccessTimeIcon style={{ marginRight: "15px" }} />
-                  <span className="fw-bold">Delivered:</span>{" "}
-                  {new Date(order.estimatedDelivery)
-                    .toString()
-                    .substring(0, 15)}
+                  {order.status !== "Placed" ? (
+                    <>
+                      <span className="fw-bold">Delivered:</span>{" "}
+                      {new Date(order.estimatedDelivery)
+                        .toString()
+                        .substring(0, 15)}
+                    </>
+                  ) : (
+                    <>
+                      <span className="fw-bold">Delivery:</span>{" "}
+                      <span className="text-muted">
+                        Your order is still not confirmed by our stuff.
+                      </span>
+                    </>
+                  )}
                 </p>
               )}
               {order.rating === null ? (
@@ -187,7 +199,8 @@ const PreviewOrder = () => {
                     <StarBorderIcon style={{ marginRight: "15px" }} />
                     Rate this order:
                   </p>
-                  {new Date(order.estimatedDelivery.toString()) > new Date() ? (
+                  {new Date(order.estimatedDelivery.toString()) > new Date() ||
+                  order.status === "Placed" ? (
                     <p className="text-muted">Unavailable until delivery</p>
                   ) : (
                     <>

@@ -8,8 +8,11 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import "./Order.css";
 
 const TrackOrder = ({ order }: { order: PreviewOrderInterface }) => {
-  
-  const CalcDateDiff = (date: Date, min: number, max: number = Infinity) => {
+  const CalcDateDiff = (
+    date: Date,
+    min: number,
+    max: number = Infinity
+  ): boolean => {
     const diff =
       Math.abs(date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
     return diff >= min && diff < max;
@@ -78,10 +81,7 @@ const TrackOrder = ({ order }: { order: PreviewOrderInterface }) => {
             <div
               className={
                 order.confirmationDate &&
-                (CalcDateDiff(
-                  new Date(order.confirmationDate.toString()),
-                  2
-                ) ||
+                (CalcDateDiff(new Date(order.confirmationDate.toString()), 2) ||
                   new Date(order.estimatedDelivery) <= new Date())
                   ? "step"
                   : "step step-inv"
@@ -126,7 +126,8 @@ const TrackOrder = ({ order }: { order: PreviewOrderInterface }) => {
           <div className="order-delivered">
             <div
               className={
-                new Date() >= new Date(order.estimatedDelivery)
+                new Date() >= new Date(order.estimatedDelivery) &&
+                order.status !== "Placed"
                   ? "step"
                   : "step step-inv"
               }
@@ -137,17 +138,24 @@ const TrackOrder = ({ order }: { order: PreviewOrderInterface }) => {
               </div>
               <div>
                 <p className="fw-bold">Delivered</p>
-                {new Date(order.estimatedDelivery) < new Date() ? (
+                {new Date(order.estimatedDelivery) < new Date() &&
+                order.status !== "Placed" ? (
                   <span className="text-muted">
                     Your order has been delivered on{" "}
                     {order.estimatedDelivery.substring(0, 10)}
                   </span>
                 ) : (
                   <span className="text-muted">
-                    Your order should be delivered on{" "}
-                    {new Date(order.estimatedDelivery)
-                      .toString()
-                      .substring(4, 15)}
+                    {new Date(order.estimatedDelivery) > new Date() ? (
+                      <>
+                        Your order should be delivered on{" "}
+                        {new Date(order.estimatedDelivery)
+                          .toString()
+                          .substring(4, 15)}
+                      </>
+                    ) : (
+                      <>Your order must be confirmed first. Stay tuned...</>
+                    )}
                   </span>
                 )}
               </div>

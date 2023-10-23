@@ -42,6 +42,8 @@ router.get("/get/rating-stats", VerifyToken, VerifyAdmin, RatingStats);
 
 router.get("/:order_id/:user_id", VerifyToken, VerifyUser, GetOrder);
 
+router.get("/:order_id/:user_id/admin", VerifyToken, VerifyAdmin, GetOrder);
+
 router.get("/export-orders-to-csv", VerifyToken, VerifyAdmin, ExportOrdersToCSV);
 
 router.post("/confirm", VerifyToken, VerifyAdmin, ConfirmOrder);
