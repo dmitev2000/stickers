@@ -36,6 +36,6 @@ router.post("/add", VerifyToken, upload.single("image"), AddSticker);
 
 router.post("/stickers-from-order", GetStickersFromOrder);
 
-router.post("/update-status", VerifyToken, VerifyAdmin, UpdateStickerStatus);
+router.post("/update-status/:user_id", VerifyToken, VerifyAdmin, UpdateStickerStatus);
 
 export default router;

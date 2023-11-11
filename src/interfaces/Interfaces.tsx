@@ -30,11 +30,11 @@ export interface CartContextType {
 }
 
 export interface FavStickersType {
-  stickerList: string[],
-  totalStickers: number,
-  clearFavorites: () => void,
-  addStickerToFavorites: (stickerID: string) => void,
-  removeStickerFromFavorites: (stickerID: string) => void,
+  stickerList: string[];
+  totalStickers: number;
+  clearFavorites: () => void;
+  addStickerToFavorites: (stickerID: string) => void;
+  removeStickerFromFavorites: (stickerID: string) => void;
 }
 
 export interface StickerInOrder {
@@ -126,4 +126,17 @@ export interface RatingStatsInterface {
   totalOrders: number;
   ratedOrders: number;
   avgRating: number;
+}
+
+export interface PopularStickerData {
+  stickerID: string;
+  data: {
+    orders: number;
+    count: number;
+  };
+}
+
+export interface IPopularStickers {
+  stickerData: Sticker[];
+  topThree: PopularStickerData[];
 }

@@ -65,7 +65,7 @@ const PreviewOrder = () => {
       if (result.isConfirmed) {
         axios
           .delete(
-            `${BASE_URL}/cancel-order/${order?.orderID}/${AuthCtx.state.user?._id}`,
+            `${BASE_URL}/orders/cancel-order/${order?.orderID}/${AuthCtx.state.user?._id}`,
             {
               headers: {
                 Authorization: `Bearer ${AuthCtx.state.token}`,

@@ -12,9 +12,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
 import { FireNotification } from "../../utils/FireNotificiation";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
+import { AuthContext } from "../../context/AuthenticationContext";
+import { BASE_URL } from "../../utils/API_URLs";
 
 const PendingSticker = ({ item }: { item: any }) => {
   const ReloadCtx = useContext(ReloadDashboardContext);
+  const AuthCtx = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
 
@@ -33,13 +36,18 @@ const PendingSticker = ({ item }: { item: any }) => {
       status = "Rejected";
     }
     axios
-      .post("http://localhost:5000/api/stickers/update-status", {
+      .post(`${BASE_URL}/stickers/update-status/${AuthCtx.state.user?._id}`, {
         sticker: {
           _id: item._id,
           title: item.title,
         },
         status: status,
         reason: reason,
+      }, {
+        headers: {
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+          "Content-Type": "application/json",
+        }
       })
       .then((res) => {
         FireNotification(res.data);

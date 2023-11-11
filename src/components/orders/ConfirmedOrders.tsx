@@ -47,7 +47,8 @@ const ConfirmedOrders = () => {
       });
   }, [ReloadCtx.reloadConfirmedOrders, ReloadCtx.reloadPlacedOrders]);
 
-  const ExportToCSV = () => {
+  const ExportToCSV = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     axios
       .get(`${BASE_URL}/orders/export-orders-to-csv`, {
         headers: {

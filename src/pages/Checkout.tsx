@@ -70,7 +70,7 @@ const Checkout = () => {
 
   return (
     <div className="container">
-      <h3 className="my-5">Checkout</h3>
+      <h3 className="my-5 dashboard-h">Checkout</h3>
       <div className="checkout mb-5">
         <div className="py-5 d-flex">
           <form onSubmit={Purchase} className="checkout-form w-100">

@@ -145,7 +145,9 @@ export const GetPopularStickers = async (req, res, next) => {
       }))
       .sort((a, b) => b.data.count - a.data.count)
       .slice(0, 3);
-    res.status(200).json(topThree);
+    const ids = topThree.map((s) => s.stickerID);
+    const stickerData = await Sticker.find({ _id: { $in: ids } });
+    res.status(200).json({ topThree, stickerData });
   } catch (error) {
     next(error);
   }

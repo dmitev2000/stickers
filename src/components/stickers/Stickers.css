@@ -268,3 +268,39 @@
   right: 0;
   bottom: 0;
 }
+
+.popular-sticker {
+  position: relative;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0 5px lightgray;
+}
+
+.popular-sticker .place {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: #27282c;
+  border-radius: 50%;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popular-sticker img {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+}
+
+.popular-sticker .stats {
+  position: absolute;
+  display: flex;
+  gap: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+}
