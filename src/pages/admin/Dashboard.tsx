@@ -26,12 +26,14 @@ const Dashboard = () => {
         <h3 className="mb-4 dashboard-h">Stickers</h3>
         <StickerRequests />
         <RejectedStickers />
-        <h3 className="mt-5 dashboard-h">Orders</h3>
+        <div className="mt-5 d-flex justify-content-between align-items-center">
+          <h3 className="dashboard-h">Orders</h3>
+          <Link className="link" to="/admin/order-statistics">
+            <QueryStatsIcon fontSize="small" /> Order statistics
+          </Link>
+        </div>
         <PlacedOrders />
         <ConfirmedOrders />
-        <Link className="link" to="/admin/order-statistics">
-          <QueryStatsIcon fontSize="small" /> Order statistics
-        </Link>
         <h3 className="mt-5 mb-4 dashboard-h">Users</h3>
         <UsersInfo />
       </div>

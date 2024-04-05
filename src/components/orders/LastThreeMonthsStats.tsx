@@ -1,4 +1,6 @@
 import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import Loader from "../loader/Loader";
 import { OrderStatisticsRecord } from "../../interfaces/Interfaces";
 import {
   BarChart,
@@ -9,13 +11,11 @@ import {
   Legend,
   Bar,
 } from "recharts";
-import axios from "axios";
-import Loader from "../loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthenticationContext";
 import { BASE_URL } from "../../utils/API_URLs";
 
-const OrderStatisticsChart = () => {
+const LastThreeMonthsStatisticsChart = () => {
   const [statisticsData, setStatisticsData] = useState<
     OrderStatisticsRecord[] | []
   >([]);
@@ -31,13 +31,15 @@ const OrderStatisticsChart = () => {
     setLoading(true);
     setError(null);
     axios
-      .get(`${BASE_URL}/orders/get/statistics`, {
+      .get(`${BASE_URL}/orders/get/last-three-months-stats`, {
         headers: {
           Authorization: `Bearer ${AuthCtx.state.token}`,
+          "Content-Type": "application/json",
         },
       })
       .then((res) => {
         setStatisticsData(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         setError(err);
@@ -83,4 +85,4 @@ const OrderStatisticsChart = () => {
   );
 };
 
-export default OrderStatisticsChart;
+export default LastThreeMonthsStatisticsChart;

@@ -140,3 +140,10 @@ export interface IPopularStickers {
   stickerData: Sticker[];
   topThree: PopularStickerData[];
 }
+
+export interface LastThreeMonthsStatisticsInterface {
+  name: string;
+  profit: string;
+  stickers_sold: number;
+  num_orders: number;
+}

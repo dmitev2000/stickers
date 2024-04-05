@@ -7,6 +7,7 @@ import {
   GetAllOrders,
   GetAllTimeStatistics,
   GetConfirmedOrders,
+  GetLastThreeMonthsStatistics,
   GetOrder,
   GetOrderStatistics,
   GetOrdersByUser,
@@ -16,7 +17,11 @@ import {
   SetRating,
   StatisticsByCategory,
 } from "../controllers/OrderController.js";
-import { VerifyAdmin, VerifyToken, VerifyUser } from "../middlewares/Restrict.js";
+import {
+  VerifyAdmin,
+  VerifyToken,
+  VerifyUser,
+} from "../middlewares/Restrict.js";
 
 const router = express.Router();
 
@@ -32,11 +37,28 @@ router.get("/get/confirmed", VerifyToken, VerifyAdmin, GetConfirmedOrders);
 
 router.get("/get/statistics", VerifyToken, VerifyAdmin, GetOrderStatistics);
 
-router.get("/get/all-time-statistics", VerifyToken, VerifyAdmin, GetAllTimeStatistics);
+router.get(
+  "/get/all-time-statistics",
+  VerifyToken,
+  VerifyAdmin,
+  GetAllTimeStatistics
+);
 
-router.get("/get/category-statistics", VerifyToken, VerifyAdmin, StatisticsByCategory);
+router.get(
+  "/get/category-statistics",
+  VerifyToken,
+  VerifyAdmin,
+  StatisticsByCategory
+);
 
-router.get("/get/current-month-statistics", VerifyToken, VerifyAdmin, CurrentMonthStatistics);
+router.get(
+  "/get/current-month-statistics",
+  VerifyToken,
+  VerifyAdmin,
+  CurrentMonthStatistics
+);
+
+router.get("/get/last-three-months-stats", GetLastThreeMonthsStatistics);
 
 router.get("/get/rating-stats", VerifyToken, VerifyAdmin, RatingStats);
 
@@ -44,12 +66,22 @@ router.get("/:order_id/:user_id", VerifyToken, VerifyUser, GetOrder);
 
 router.get("/:order_id/:user_id/admin", VerifyToken, VerifyAdmin, GetOrder);
 
-router.get("/export-orders-to-csv", VerifyToken, VerifyAdmin, ExportOrdersToCSV);
+router.get(
+  "/export-orders-to-csv",
+  VerifyToken,
+  VerifyAdmin,
+  ExportOrdersToCSV
+);
 
 router.post("/confirm", VerifyToken, VerifyAdmin, ConfirmOrder);
 
 router.post("/set-rating/:user_id", VerifyToken, VerifyUser, SetRating);
 
-router.delete("/cancel-order/:order_id/:user_id", VerifyToken, VerifyUser, CancelOrder);
+router.delete(
+  "/cancel-order/:order_id/:user_id",
+  VerifyToken,
+  VerifyUser,
+  CancelOrder
+);
 
 export default router;

@@ -454,3 +454,63 @@ export const ExportOrdersToCSV = async (req, res, next) => {
     next(error);
   }
 };
+
+export const GetLastThreeMonthsStatistics = async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    currentDate.setHours(0);
+    currentDate.setMinutes(0);
+    currentDate.setSeconds(0);
+    currentDate.setMilliseconds(0);
+
+    const startOfMonth1 = new Date(currentDate);
+    startOfMonth1.setMonth(startOfMonth1.getMonth() - 1);
+    startOfMonth1.setDate(1);
+
+    const startOfMonth2 = new Date(startOfMonth1);
+    startOfMonth2.setMonth(startOfMonth2.getMonth() - 1);
+
+    const startOfMonth3 = new Date(startOfMonth2);
+    startOfMonth3.setMonth(startOfMonth3.getMonth() - 1);
+
+    const monthlyData = [];
+
+    monthlyData.push(
+      await calculateMonthStatistics(startOfMonth1, currentDate)
+    );
+    monthlyData.push(
+      await calculateMonthStatistics(startOfMonth2, startOfMonth1)
+    );
+    monthlyData.push(
+      await calculateMonthStatistics(startOfMonth3, startOfMonth2)
+    );
+
+    res.status(200).json(monthlyData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const calculateMonthStatistics = async (startDate, endDate) => {
+  const orders = await Order.find({
+    createdAt: {
+      $gte: new Date(startDate),
+      $lt: new Date(endDate),
+    },
+    status: "Confirmed",
+  });
+
+  const profit = orders.reduce((acc, curr) => acc + curr.totalPrice, 0);
+  const stickersSold = orders.reduce((acc, curr) => {
+    return (
+      acc + curr.stickerList.reduce((acc2, curr2) => acc2 + curr2.quantity, 0)
+    );
+  }, 0);
+
+  return {
+    name: startDate.toLocaleString("default", { month: "short" }),
+    profit: profit.toFixed(2),
+    stickers_sold: stickersSold,
+    num_orders: orders.length,
+  };
+};

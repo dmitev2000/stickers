@@ -3,6 +3,7 @@ import OrderStatisticsChart from "../../components/orders/OrderStatisticsChart";
 import OrderStatisticsTagsChart from "../../components/orders/OrderStatisticsTagsChart";
 import CurrentMonthStats from "../../components/orders/CurrentMonthStats";
 import RatingStats from "../../components/orders/RatingStats";
+import LastThreeMonthsStatisticsChart from "../../components/orders/LastThreeMonthsStats";
 
 const OrderStatistics = () => {
   window.scrollTo(0, 0);
@@ -24,9 +25,7 @@ const OrderStatistics = () => {
         </div>
         <div>
           <h3 className="mb-4">Statistics for the last 3 months:</h3>
-          <div className="d-flex justify-content-center align-items-center text-muted h-50 fw-bold">
-            Nothing to display at the moment.
-          </div>
+          <LastThreeMonthsStatisticsChart />
         </div>
         <div>
           <h3 className="mb-4">All time statistics:</h3>
