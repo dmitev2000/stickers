@@ -17,15 +17,15 @@ const OrderStatistics = () => {
           <OrderStatisticsChart />
         </div>
         <div>
+          <h3 className="mb-4">Statistics for the last 3 months:</h3>
+          <LastThreeMonthsStatisticsChart />
+        </div>
+        <div>
           <h3 className="mb-4">
             Statistics for {new Date().toDateString().split(" ")[1]}{" "}
             {new Date().toDateString().split(" ")[3]}:
           </h3>
           <CurrentMonthStats />
-        </div>
-        <div>
-          <h3 className="mb-4">Statistics for the last 3 months:</h3>
-          <LastThreeMonthsStatisticsChart />
         </div>
         <div>
           <h3 className="mb-4">All time statistics:</h3>
