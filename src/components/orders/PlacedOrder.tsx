@@ -63,9 +63,18 @@ const PlacedOrder = ({ order }: { order: PlacedOrderInterface }) => {
       return;
     }
     axios
-      .post("http://localhost:5000/api/stickers/stickers-from-order", {
-        stickerIDs: order.stickerList,
-      })
+      .post(
+        "http://localhost:5000/api/stickers/stickers-from-order",
+        {
+          stickerIDs: order.stickerList,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         setStickerDetails(res.data);
         setLoading(false);

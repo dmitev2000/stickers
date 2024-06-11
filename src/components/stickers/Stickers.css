@@ -150,8 +150,9 @@
   padding-right: 10px;
 }
 
-.reload-btn:hover, .export-csv-btn:hover {
-  opacity: .8;
+.reload-btn:hover,
+.export-csv-btn:hover {
+  opacity: 0.8;
 }
 
 .fav-sticker {
@@ -210,7 +211,7 @@
   right: -100px;
   z-index: 20;
   transition: all 0.4s;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
 
 .fav-sticker .remove {
@@ -280,11 +281,13 @@
   position: absolute;
   top: 15px;
   right: 20px;
-  font-size: 30px;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 25px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   color: #27282c;
+  background-color: #ff1867;
   border-radius: 50%;
   width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -299,8 +302,18 @@
 .popular-sticker .stats {
   position: absolute;
   display: flex;
-  gap: 25px;
-  top: 50%;
-  left: 50%;
-  transform: translateY(-50%);
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 45px;
+  top: calc(50% - 55px);
+  right: 100px;
+  font-size: 40px;
+  color: #27282c;
+}
+
+.popular-sticker .stats div {
+  border: solid 4px #ff1867;
+  border-radius: 15px;
+  cursor: default;
 }

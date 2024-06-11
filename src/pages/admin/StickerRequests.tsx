@@ -10,9 +10,11 @@ import PendingStickersList from "../../components/stickers/PendingStickersList";
 import DashboardLoader from "../../components/loader/DashboardLoader";
 import ReloadDashboardContext from "../../context/ReloadDashboardContext";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthenticationContext";
 
 const StickerRequests = () => {
   const ReloadCtx = useContext(ReloadDashboardContext);
+  const AuthCtx = useContext(AuthContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +28,12 @@ const StickerRequests = () => {
   useEffect(() => {
     setError(null);
     axios
-      .get("http://localhost:5000/api/stickers/get/pending")
+      .get("http://localhost:5000/api/stickers/get/pending", {
+        headers: {
+          Authorization: `Bearer ${AuthCtx.state.token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         setData(res.data);
         setLoading(false);

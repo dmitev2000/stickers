@@ -46,7 +46,7 @@ const PopularStickers = () => {
           <p className="text-danger">{error}</p>
         </div>
       )}
-      <div className="d-flex flex-column justify-content-center align-items-start gap-5 flex-wrap py-5">
+      <div className="d-flex flex-column justify-content-center align-items-start gap-3 flex-wrap py-5">
         {data.map((el, index) => {
           return (
             <PopularStickerComponent
