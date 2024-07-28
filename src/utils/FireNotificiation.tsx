@@ -4,7 +4,7 @@ import "sweetalert2/dist/sweetalert2.css";
 export const FireNotification = (message: string) => {
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-end",
+    position: "bottom-end",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
@@ -22,7 +22,7 @@ export const FireNotification = (message: string) => {
 export const FireErrorNotification = (message: string) => {
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-end",
+    position: "bottom-end",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,

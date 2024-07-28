@@ -61,7 +61,7 @@ const Checkout = () => {
           )
           .then(() => {
             CartCtx.emptyCart();
-            navigate("/");
+            navigate(`/my-orders/${AuthCtx.state.user?._id}`);
           })
           .catch((err) => console.log(err.response.data));
       })

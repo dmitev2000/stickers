@@ -95,7 +95,7 @@ export const AddMultipleStickersToCart = async (req, res, next) => {
     }
     res.status(200).json({
       stickers: stickers_data,
-      message: "Your cart is updated sucessfully.",
+      message: "Your cart is updated successfully.",
     });
   } catch (error) {
     next(error);

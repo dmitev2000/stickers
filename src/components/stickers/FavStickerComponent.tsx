@@ -52,11 +52,20 @@ const FavStickerComponent = ({ sticker_data }: { sticker_data: Sticker }) => {
 
   const AddToCart = () => {
     axios
-      .post(`${BASE_URL}/cart/update-cart`, {
-        userID: AuthCtx.state.user?._id,
-        sticker: sticker_data,
-        quantity: 1,
-      })
+      .post(
+        `${BASE_URL}/cart/update-cart/${AuthCtx.state.user?._id}`,
+        {
+          userID: AuthCtx.state.user?._id,
+          sticker: sticker_data,
+          quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthCtx.state.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         CartCtx.addSticker({ sticker: sticker_data, quantity: 1 });
         FireNotification(

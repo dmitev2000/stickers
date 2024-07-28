@@ -74,7 +74,7 @@ const PreviewOrder = () => {
             }
           )
           .then((res) => {
-            FireErrorNotification("Your order has been caneled.");
+            FireErrorNotification("Your order has been canceled.");
             navigate(`/my-orders/${AuthCtx.state.user?._id}`);
           })
           .catch((err) => console.error(err));
