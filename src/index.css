@@ -423,6 +423,7 @@ tfoot {
 .account-menu-link:hover {
   text-decoration: none;
   color: inherit;
+  width: 100%;
 }
 
 .checkout {

@@ -147,3 +147,15 @@ export interface LastThreeMonthsStatisticsInterface {
   stickers_sold: number;
   num_orders: number;
 }
+
+export interface IRejectedSticker {
+  __v: number;
+  _id: string;
+  reason: string;
+  sticker: Sticker;
+}
+
+export interface IUserStickersResponse {
+  rejectedStickers: IRejectedSticker[];
+  validStickers: Sticker[];
+}

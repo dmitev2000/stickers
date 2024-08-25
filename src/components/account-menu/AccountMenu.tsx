@@ -7,7 +7,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
+import LabelIcon from "@mui/icons-material/Label";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { AuthContext } from "../../context/AuthenticationContext";
@@ -15,6 +15,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FireNotification } from "../../utils/FireNotificiation";
 import CartContext from "../../context/CartContext";
 import FavoritesContext from "../../context/FavoritesContext";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const AccountMenu = () => {
   const AuthCtx = React.useContext(AuthContext);
@@ -74,6 +76,7 @@ const AccountMenu = () => {
         PaperProps={{
           elevation: 0,
           sx: {
+            width: 250,
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
@@ -106,9 +109,36 @@ const AccountMenu = () => {
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <LabelIcon fontSize="small" />
           </ListItemIcon>
-          <span>Add another account</span>
+          <Link
+            to={`/stickers/${AuthCtx.state.user?._id}`}
+            className="account-menu-link"
+          >
+            My stickers
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <ShoppingCartIcon fontSize="small" />
+          </ListItemIcon>
+          <Link
+            to={`/cart/${AuthCtx.state.user?._id}`}
+            className="account-menu-link"
+          >
+            My cart
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <FavoriteIcon fontSize="small" />
+          </ListItemIcon>
+          <Link
+            to={`/favorites/${AuthCtx.state.user?._id}`}
+            className="account-menu-link"
+          >
+            My favorites
+          </Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
@@ -127,6 +157,7 @@ const AccountMenu = () => {
           </ListItemIcon>
           <span>Settings</span>
         </MenuItem>
+        <Divider />
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

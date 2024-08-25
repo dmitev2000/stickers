@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
 import CreateSticker from "./pages/CreateSticker";
-import FavoriteStickers from './pages/FavoriteStickers';
+import FavoriteStickers from "./pages/FavoriteStickers";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Checkout from "./pages/Checkout";
@@ -13,6 +13,7 @@ import PreviewOrder from "./pages/PreviewOrder";
 import OrderStatistics from "./pages/admin/OrderStatistics";
 import Forbidden from "./pages/Forbidden";
 import PopularStickers from "./pages/PopularStickers";
+import MyStickers from "./pages/MyStickers";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/my-orders/:id" element={<MyOrders />} />
       <Route path="/my-orders/preview-order/:id" element={<PreviewOrder />} />
+      <Route path="/stickers/:user_id" element={<MyStickers />} />
       <Route path="/create-sticker" element={<CreateSticker />} />
       <Route path="/favorites/:user_id" element={<FavoriteStickers />} />
       <Route path="/popular" element={<PopularStickers />} />
