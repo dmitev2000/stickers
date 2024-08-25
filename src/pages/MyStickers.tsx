@@ -9,8 +9,10 @@ import {
 } from "../interfaces/Interfaces";
 import UsersRejected from "../components/stickers/UsersRejected";
 import Card from "@mui/material/Card";
-import { Divider } from "@mui/material";
+import { Badge, Divider } from "@mui/material";
 import UsersValid from "../components/stickers/UsersValid";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const MyStickers = () => {
   const [rData, setRData] = useState<IRejectedSticker[]>([]);
@@ -51,13 +53,27 @@ const MyStickers = () => {
     <div className="container">
       <h3 className="my-5 dashboard-h">My Stickers</h3>
       <Card sx={{ padding: "20px", marginBottom: "25px" }}>
-        <h4 className="dashboard-h">My valid stickers</h4>
-        <UsersValid data={vData} />
+        <Badge badgeContent={vData.length ?? 0} color="success" showZero>
+          <h4 className="dashboard-h">Valid</h4>
+          <CheckCircleIcon color="success" />
+        </Badge>
+        {vData && vData.length > 0 ? (
+          <UsersValid data={vData} />
+        ) : (
+          <p className="fst-italic">Nothing to show.</p>
+        )}
       </Card>
 
       <Card sx={{ padding: "20px", marginBottom: "25px" }}>
-        <h4 className="dashboard-h">My rejected stickers</h4>
-        <UsersRejected data={rData} />
+        <Badge badgeContent={rData.length ?? 0} color="error" showZero>
+          <h4 className="dashboard-h">Rejected</h4>
+          <HighlightOffIcon color="error" />
+        </Badge>
+        {rData && rData.length > 0 ? (
+          <UsersRejected data={rData} />
+        ) : (
+          <p className="fst-italic">Nothing to show.</p>
+        )}
       </Card>
     </div>
   );
